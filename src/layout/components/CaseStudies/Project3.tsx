@@ -1,4 +1,4 @@
-import React from 'react'
+
 import ShinyText from '@/components/reactbits/ShinyText'
 const Project3 = () => {
   return (

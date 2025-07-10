@@ -1,5 +1,5 @@
 import ShinyText from "@/components/reactbits/ShinyText";
-import React from "react";
+
 
 const Project2 = () => {
   return (

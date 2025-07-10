@@ -26,9 +26,9 @@ export const BentoGrid = ({
 export const BentoGridItem = ({
   className,
   title,
-  description,
-  header,
-  icon,
+  // description,
+  // header,
+  // icon,
   imageUrl,
   liveLink,
   caseStudyLink,

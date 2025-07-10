@@ -38,6 +38,7 @@
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@types/react-slick": "^0.23.13",
     "@types/react-transition-group": "^4.4.12",
     "@types/vivus": "^0.4.7",
     "@vitejs/plugin-react": "^4.4.1",

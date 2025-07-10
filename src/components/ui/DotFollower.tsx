@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect } from "react";
 
 interface FollowCursorProps {
@@ -13,7 +12,10 @@ const FollowCursor: React.FC<FollowCursorProps> = ({ color = "#fff" }) => {
     let animationFrame: number;
     let width = window.innerWidth;
     let height = window.innerHeight;
-    let cursor = { x: width / 2, y: height / 2 };
+    const cursor: {
+      x: number;
+      y: number;
+    } = { x: 0, y: 0 };
     let visible = true; // true = dot shown
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"

@@ -7,9 +7,9 @@ export function Projects() {
         <BentoGridItem
           key={i}
           title={item.title}
-          description={item.description}
-          header={item.header}
-          icon={item.icon}
+          // description={item.description}
+          // header={item.header}
+          // icon={item.icon}
           imageUrl={item.imageUrl}
           liveLink={item.liveLink}
           caseStudyLink={item.caseStudyLink}

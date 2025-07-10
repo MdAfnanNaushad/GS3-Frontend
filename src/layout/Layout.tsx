@@ -5,6 +5,7 @@ import FollowCursor from "@/components/ui/DotFollower";
 import FloatingAIChat from "./components/common/ChatModel";
 import { useState } from "react";
 import AI from "./components/common/AIAsistant";
+import Footer from "./components/common/Footer";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -29,6 +30,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <main className="z-10 w-full h-full flex justify-center items-center">
           {children}
         </main>
+        <Footer />
         <AI open={open} setOpen={() => setOpen(true)} />
         <FloatingAIChat open={open} setOpen={() => setOpen(false)} />
       </ClickSpark>

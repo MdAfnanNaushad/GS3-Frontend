@@ -3,8 +3,11 @@ import { DirectionAwareHover } from "./direction-aware-hover";
 import { Aperture, Globe, SearchSlash } from "lucide-react";
 import { Button } from "./button";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const BentoGrid = ({
   className,
@@ -39,7 +42,25 @@ export const BentoGridItem = ({
   caseStudyLink: string;
 }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (ref.current) {
+      gsap.fromTo(
+        ref.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top 90%",
+          },
+        }
+      );
+    }
+  }, []);
 
   return (
     <div
@@ -51,60 +72,33 @@ export const BentoGridItem = ({
     >
       <DirectionAwareHover imageUrl={imageUrl} className="w-full">
         <div className="w-full h-full flex flex-col justify-between py-1 gap-2">
-          {/* Title Animation */}
-          {inView ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center"
-            >
-              <Aperture /> {title}
-            </motion.div>
-          ) : (
-            <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
-              <Aperture /> {title}
-            </div>
-          )}
+          <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
+            <Aperture /> {title}
+          </div>
 
-          {/* Button animations */}
           <div className="flex flex-col sm:flex-row justify-center items-center w-full mt-4 gap-4 sm:gap-6">
-            {inView && (
-              <motion.a
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-                href={liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
+            <a
+              href={liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="default"
+                className="font-orbitron w-[100px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
               >
-                <Button
-                  variant="default"
-                  className="font-orbitron w-[100px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
-                >
-                  <Globe className="mr-1" />
-                  Live
-                </Button>
-              </motion.a>
-            )}
-
-            {inView && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                <Globe className="mr-1" />
+                Live
+              </Button>
+            </a>
+            <Link to={caseStudyLink}>
+              <Button
+                variant="default"
+                className="font-orbitron w-[150px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
               >
-                <Link to={caseStudyLink}>
-                  <Button
-                    variant="default"
-                    className="font-orbitron w-[150px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
-                  >
-                    <SearchSlash className="mr-1" />
-                    Case Study
-                  </Button>
-                </Link>
-              </motion.div>
-            )}
+                <SearchSlash className="mr-1" />
+                Case Study
+              </Button>
+            </Link>
           </div>
         </div>
       </DirectionAwareHover>

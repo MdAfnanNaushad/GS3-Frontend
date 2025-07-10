@@ -111,7 +111,7 @@ const Testimonial = () => {
             <motion.div
               key={idx}
               whileHover="hover"
-              className="relative overflow-hidden mx-4 min-w-[300px] max-w-sm rounded-xl p-10 bg-white/5 backdrop-blur-md border border-white/10 text-white transition-all duration-300 ease-in-out hover:scale-105  hover:shadow-xl hover:z-30"
+              className="relative overflow-hidden mx-2 sm:mx-4 min-w-[250px] sm:min-w-[300px] max-w-xs sm:max-w-sm rounded-xl p-6 sm:p-10 bg-white/5 backdrop-blur-md border border-white/10 text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:z-30"
             >
               <motion.div
                 variants={{

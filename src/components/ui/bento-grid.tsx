@@ -38,20 +38,20 @@ export const BentoGridItem = ({
   description?: string | React.ReactNode;
   header?: React.ReactNode;
   icon?: React.ReactNode;
-  imageUrl:string;
-  liveLink:string;
-  caseStudyLink:string
+  imageUrl: string;
+  liveLink: string;
+  caseStudyLink: string;
 }) => {
   return (
     <div
       className={cn(
-        "group/bento shadow-input w-full row-span-1 flex flex-col justify-between space-y-4 rounded-xl border border-neutral-200 bg-white p-4 transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none",
+        "group/bento shadow-input w-full row-span-1 flex flex-col justify-between space-y-4 rounded-xl border border-neutral-200 bg-white p-2 transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none",
         className
       )}
     >
-      <DirectionAwareHover imageUrl={imageUrl}className="w-full">
+      <DirectionAwareHover imageUrl={imageUrl} className="w-full">
         <div className="w-full h-full  flex flex-col justify-between py-1 gap-2">
-          <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-1 items-center">
+          <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
             <Aperture /> {title}
           </div>
 
@@ -66,18 +66,16 @@ export const BentoGridItem = ({
               </Button>
             </a>
 
-           
-              <Link to={caseStudyLink}>
+            <Link to={caseStudyLink}>
               <Button
                 variant="default"
                 className="font-orbitron ml-24 px-4 py-2 font-orbitron w-[150px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
               >
                 {" "}
-                <SearchSlash className="mr-1"/>
+                <SearchSlash className="mr-1" />
                 Case Study
               </Button>
-              </Link>
-            
+            </Link>
           </div>
         </div>
       </DirectionAwareHover>

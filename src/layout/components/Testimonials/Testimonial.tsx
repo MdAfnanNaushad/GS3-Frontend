@@ -1,8 +1,5 @@
-import React from "react";
 import Marquee from "react-fast-marquee";
 import { Star } from "lucide-react";
-
-
 import { motion } from "framer-motion";
 
 const testimonials = [
@@ -52,9 +49,7 @@ const testimonials = [
     message:
       "Thoroughly impressed with the responsiveness and accessibility built in.",
     image:
-
       "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cHJvZmlsZSUyMHBob3RvfGVufDB8fDB8fHww",
-
   },
   {
     name: "Zara Ali",
@@ -91,19 +86,20 @@ const testimonials = [
 
 const Testimonial = () => {
   return (
-    <div className="py-20 transition-all duration-300 text-amber-50">
-      <div className="flex justify-center mb-12">
+    <div className=" transition-all duration-300 text-amber-50">
+      <div className="flex justify-center">
+        <h2 className="font-orbitron pl-4 text-4xl lg:text-4xl xl:text-5xl text-border-white tracking-widest mb-2 pb-1 text-center">
+          <span className="hidden md:inline">What People are Saying</span>
 
-        
-          <h2 className="font-orbitron text-nowrap pl-4 text-4xl lg:text-4xl xl:text-5xl flex justify-center xl:justify-end text-border-white tracking-widest">
-            What People are Saying
-          </h2>
-          
-      
-
+          <span className="block md:hidden">
+            What People are
+            <br />
+            <span className="block text-center">Saying</span>
+          </span>
+        </h2>
       </div>
 
-      <div className="overflow-visible py-4 relative z-10">
+      <div className="overflow-visible  relative z-10">
         <Marquee
           pauseOnHover
           speed={50}
@@ -115,11 +111,8 @@ const Testimonial = () => {
             <motion.div
               key={idx}
               whileHover="hover"
-
               className="relative overflow-hidden mx-4 min-w-[300px] max-w-sm rounded-xl p-10 bg-white/5 backdrop-blur-md border border-white/10 text-white transition-all duration-300 ease-in-out hover:scale-105  hover:shadow-xl hover:z-30"
-
             >
-            
               <motion.div
                 variants={{
                   hover: {
@@ -136,14 +129,12 @@ const Testimonial = () => {
                 <div className="flex items-center gap-4 mb-2">
                   <img
                     src={t.image}
-
                     className="w-12 h-12 rounded-full object-cover border transition-transform duration-300 border-amber-200 hover:border-amber-400 hover:border-2.5 hover:scale-130 hover:transition-all  hover:duration-300"
-
                     alt={t.name}
                   />
                   <div>
                     <p className="font-semibold">{t.name}</p>
-                    <p className="text-sm text-neutral-400 hover:text-amber-500 font-semibold transition duration-150">
+                    <p className="text-sm text-neutral-400 hover:text-gray-200 font-semibold transition duration-300 ">
                       {t.role}
                     </p>
                   </div>

@@ -10,7 +10,8 @@ import { useEffect, useRef, useState } from "react";
 
 const Footer = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
 
   const toggleSection = (section: string) => {
     setOpenSection((prev) => (prev === section ? null : section));
@@ -26,15 +27,15 @@ const Footer = () => {
     sectionKey: string;
   }) => {
     const ref = useRef<HTMLUListElement>(null);
-    const [height, setHeight] = useState("0px");
+    const [maxHeight, setMaxHeight] = useState("0px");
 
     useEffect(() => {
-      if (ref.current) {
-        setHeight(
+      if (ref.current && isMobile) {
+        setMaxHeight(
           openSection === sectionKey ? `${ref.current.scrollHeight}px` : "0px"
         );
       }
-    }, [openSection]);
+    }, [openSection, isMobile]);
 
     return (
       <div>
@@ -45,7 +46,7 @@ const Footer = () => {
           <span>{title}</span>
           {isMobile && (
             <ChevronDown
-              className={`ml-2 transition-transform ${
+              className={`ml-2 transform transition-transform duration-300 ${
                 openSection === sectionKey ? "rotate-180" : ""
               }`}
               size={18}
@@ -54,8 +55,8 @@ const Footer = () => {
         </button>
         <ul
           ref={ref}
-          style={{ maxHeight: !isMobile ? "none" : height }}
-          className={`transition-[max-height] duration-500 ease-in-out overflow-hidden space-y-2 text-sm ${
+          style={{ maxHeight: !isMobile ? "none" : maxHeight }}
+          className={`transition-all duration-500 ease-in-out overflow-hidden space-y-2 text-sm ${
             !isMobile || openSection === sectionKey
               ? "opacity-100"
               : "opacity-0"
@@ -82,7 +83,11 @@ const Footer = () => {
         {/* Branding & Signup */}
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <img src="/logo/GS3_logo.png" alt="GS3 Logo" className="h-8 w-auto" />
+            <img
+              src="/logo/GS3_logo.png"
+              alt="GS3 Logo"
+              className="h-8 w-auto"
+            />
             <h2 className="text-2xl font-bold">GS3 Solutions</h2>
           </div>
           <p className="mb-4 text-gray-200">Sign-up and get updates</p>
@@ -92,11 +97,13 @@ const Footer = () => {
               placeholder="Your email"
               className="px-4 py-2 w-full text-white placeholder:text-gray-300 bg-transparent focus:outline-none"
             />
-            <button className="px-4 py-2 text-white bg-gray-800 transition hover:bg-gray-700">&rarr;</button>
+            <button className="px-4 py-2 text-white bg-gray-800 transition hover:bg-gray-700">
+              &rarr;
+            </button>
           </div>
         </div>
 
-        {/* Footer Columns */}
+        {/* Footer Sections */}
         <FooterSection
           title="Company"
           sectionKey="company"
@@ -124,11 +131,21 @@ const Footer = () => {
         <div className="flex items-center justify-center my-6 gap-6">
           <hr className="flex-grow border-white/10" />
           <div className="flex gap-5 text-xl">
-            <a href="#" className="hover:text-gray-200 transition"><Facebook size={20} /></a>
-            <a href="#" className="hover:text-gray-200 transition"><Instagram size={20} /></a>
-            <a href="#" className="hover:text-gray-200 transition"><Youtube size={20} /></a>
-            <a href="#" className="hover:text-gray-200 transition"><Twitter size={20} /></a>
-            <a href="#" className="hover:text-gray-200 transition"><Linkedin size={20} /></a>
+            <a href="#" className="hover:text-gray-200 transition">
+              <Facebook size={20} />
+            </a>
+            <a href="#" className="hover:text-gray-200 transition">
+              <Instagram size={20} />
+            </a>
+            <a href="#" className="hover:text-gray-200 transition">
+              <Youtube size={20} />
+            </a>
+            <a href="#" className="hover:text-gray-200 transition">
+              <Twitter size={20} />
+            </a>
+            <a href="#" className="hover:text-gray-200 transition">
+              <Linkedin size={20} />
+            </a>
           </div>
           <hr className="flex-grow border-white/10" />
         </div>

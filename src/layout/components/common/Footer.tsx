@@ -39,16 +39,18 @@ const Footer = () => {
     return (
       <div>
         <button
-          className="font-semibold mb-4 flex justify-between items-center w-full md:cursor-default"
+          className="mb-4 flex justify-between items-center w-full md:cursor-default text-white font-semibold"
           onClick={() => isMobile && toggleSection(sectionKey)}
         >
-          {title}
-          <ChevronDown
-            className={`ml-2 transition-transform ${
-              openSection === sectionKey ? "rotate-180" : ""
-            }`}
-            size={18}
-          />
+          <span>{title}</span>
+          {isMobile && (
+            <ChevronDown
+              className={`ml-2 transition-transform ${
+                openSection === sectionKey ? "rotate-180" : ""
+              }`}
+              size={18}
+            />
+          )}
         </button>
         <ul
           ref={ref}
@@ -61,7 +63,12 @@ const Footer = () => {
         >
           {items.map((item, idx) => (
             <li key={idx}>
-              <a href="#" className="hover:text-gray-300 transition-all duration-300">{item}</a>
+              <a
+                href="#"
+                className="text-gray-200 hover:text-white transition-all duration-300"
+              >
+                {item}
+              </a>
             </li>
           ))}
         </ul>
@@ -70,7 +77,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-r from-[#0d0d1a] to-[#1b1b1b] text-white px-6 md:px-20 pt-16 pb-6">
+    <footer className="bg-black text-white px-6 md:px-20 pt-16 pb-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-6 gap-10">
         {/* Branding & Signup */}
         <div className="md:col-span-2">
@@ -78,72 +85,66 @@ const Footer = () => {
             <img src="/logo/GS3_logo.png" alt="GS3 Logo" className="h-8 w-auto" />
             <h2 className="text-2xl font-bold">GS3 Solutions</h2>
           </div>
-          <p className="mb-4">Sign-up and get updates</p>
-          <div className="flex items-center bg-white rounded overflow-hidden">
+          <p className="mb-4 text-gray-200">Sign-up and get updates</p>
+          <div className="flex items-center rounded overflow-hidden backdrop-blur-sm bg-black/20 transition border border-gray-300 hover:border-gray-200">
             <input
               type="email"
               placeholder="Your email"
-              className="px-4 py-2 w-full text-black focus:outline-none"
+              className="px-4 py-2 w-full text-white placeholder:text-gray-300 bg-transparent focus:outline-none"
             />
-            <button className="bg-[#3d1c92] px-4 py-2 text-white">&rarr;</button>
-          </div>
-          <div className="flex gap-3 mt-6 ">
-            <a href="#">
-              <Linkedin />
-            </a>
-            <a href="#">
-              <Youtube />
-            </a>
-            <a href="#">
-              <Instagram />
-            </a>
-            <a href="#">
-              <Facebook />
-            </a>
-            <a href="#">
-              <Twitter />
-            </a>
+            <button className="px-4 py-2 text-white bg-gray-800 transition hover:bg-gray-700">&rarr;</button>
           </div>
         </div>
 
-        {/* Footer Columns with Dropdowns */}
+        {/* Footer Columns */}
         <FooterSection
           title="Company"
           sectionKey="company"
           items={["About Us", "Careers", "Services", "Contact Us", "Our Team"]}
         />
-
         <FooterSection
           title="Solutions"
           sectionKey="solutions"
           items={["Product A", "Product B", "Integrations", "Demos", "Pricing"]}
         />
-
-        <FooterSection
-          title="Industries"
-          sectionKey="industries"
-          items={["E-Commerce", "Education", "Healthcare", "SaaS", "See All →"]}
-        />
-
         <FooterSection
           title="Resources"
           sectionKey="resources"
           items={["Blog", "Documentation", "Case Studies", "Tutorials", "Built with GS3"]}
         />
-
         <FooterSection
-          title="Community"
-          sectionKey="community"
-          items={["Help Center", "Community Forum", "Affiliate Program", "Partners"]}
+          title="Partners"
+          sectionKey="partners"
+          items={["Affiliate Program", "App Partners", "Solutions Partner", "Become a Partner"]}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto mt-12 border-t border-white/10 pt-6 text-sm flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400">
-        <p>&copy; {new Date().getFullYear()} GS3 Solutions. All rights reserved.</p>
-        <div className="flex gap-4">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Cookie Policy</a>
+      {/* Divider Section */}
+      <div className="max-w-7xl mx-auto mt-12 text-sm text-gray-400 text-center">
+        <div className="flex items-center justify-center my-6 gap-6">
+          <hr className="flex-grow border-white/10" />
+          <div className="flex gap-5 text-xl">
+            <a href="#" className="hover:text-gray-200 transition"><Facebook size={20} /></a>
+            <a href="#" className="hover:text-gray-200 transition"><Instagram size={20} /></a>
+            <a href="#" className="hover:text-gray-200 transition"><Youtube size={20} /></a>
+            <a href="#" className="hover:text-gray-200 transition"><Twitter size={20} /></a>
+            <a href="#" className="hover:text-gray-200 transition"><Linkedin size={20} /></a>
+          </div>
+          <hr className="flex-grow border-white/10" />
+        </div>
+        <p className="text-sm mb-2 text-gray-500">
+          &copy; {new Date().getFullYear()} GS3 Solutions. All rights reserved.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3 text-xs text-white font-semibold">
+          <a href="#" className="hover:underline">Legal Stuff</a>
+          <span>|</span>
+          <a href="#" className="hover:underline">Privacy Policy</a>
+          <span>|</span>
+          <a href="#" className="hover:underline">Security</a>
+          <span>|</span>
+          <a href="#" className="hover:underline">Website Accessibility</a>
+          <span>|</span>
+          <a href="#" className="hover:underline">Manage Cookies</a>
         </div>
       </div>
     </footer>

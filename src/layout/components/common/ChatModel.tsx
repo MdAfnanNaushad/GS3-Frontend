@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X, Minimize2 } from "lucide-react";
 import axios from "axios";
+import {type KeyboardEvent } from "react";
 
 const FloatingAIChat = ({
   open = false,
@@ -49,7 +50,9 @@ const FloatingAIChat = ({
     setIsTyping(true);
 
     await axios
-      .post(`http://localhost:8000/api/v1/ai/chat`, { userQuery: inputValue })
+      .post(`${import.meta.env.VITE_SERVER_URL}/ai/chat`, {
+        userQuery: inputValue,
+      })
       .then((data) => {
         console.log(data.data);
 
@@ -78,7 +81,7 @@ const FloatingAIChat = ({
       });
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -100,7 +103,7 @@ const FloatingAIChat = ({
             }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-6 right-6 w-[400px] font-orbitron bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 z-50 overflow-hidden"
+            className="fixed bottom-6 right-6 w-[400px] text-xs font-orbitron bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 z-50 overflow-hidden"
           >
             {/* Header */}
             <div
@@ -166,13 +169,13 @@ const FloatingAIChat = ({
                       }`}
                     >
                       <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                        className={`max-w-[80%] rounded-2xl px-4 py-2 text-xs ${
                           message.isAI
-                            ? "bg-black text-gray-200 rounded-tl-sm"
+                            ? "bg-black text-gray-300 rounded-tl-sm"
                             : "bg-gray-200 text-gray-800 rounded-tr-sm"
                         }`}
                       >
-                        <p className="text-sm">{message.text}</p>
+                        <p className="text-xs">{message.text}</p>
                         <p
                           className={`text-xs mt-1 ${
                             message.isAI ? "text-gray-400" : "text-gray-500"
@@ -223,7 +226,7 @@ const FloatingAIChat = ({
                       type="text"
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={handleKeyPress}
+                      onKeyDown={handleKeyPress}
                       placeholder="Type your message..."
                       className="flex-1 bg-white/10 backdrop-blur-sm border rounded-lg border-white/20  px-4 py-2 text-white placeholder-white text-sm focus:outline-none "
                     />

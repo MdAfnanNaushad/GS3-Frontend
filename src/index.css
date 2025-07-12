@@ -132,8 +132,9 @@
 
 .font-orbitron {
   font-family: "Orbitron", sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   font-style: normal;
+  font-optical-sizing: auto;
 }
 
 @layer utilities {
@@ -224,5 +225,5 @@ html::-webkit-scrollbar-thumb:active {
 
 .text-border-white {
   color: transparent;
-  -webkit-text-stroke: 0.5px rgb(237, 236, 236);
+  -webkit-text-stroke: 1.5px rgb(237, 236, 236);
 }

@@ -13,9 +13,9 @@ function Hero() {
               text={`<Innovation Starts Here />`}
               disabled={false}
               speed={3}
-              className="text-4xl lg:text-4xl xl:text-6xl font-extrabold font-orbitron"
+              className="text-5xl xl:text-6xl font-extrabold font-orbitron"
             />
-            <p className=" text-gray-200 text-sm xl:text-lg font-bold font-orbitron text-center px-10">
+            <p className=" text-gray-300 text-sm xl:text-lg font-bold font-orbitron text-center px-10">
               {`We transform your ideas into scalable apps and stunning`}{" "}
               websites — blending design, code, and strategy to build digital
               products that stand out.

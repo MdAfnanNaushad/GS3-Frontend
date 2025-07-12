@@ -176,7 +176,7 @@ const Footer = () => {
 
       <hr className="flex-grow border-white/10 mt-5" />
 
-      <div className="mt-12 flex flex-col-reverse md:flex-row justify-between gap-10">
+      <div className="mt-12 flex flex-col-reverse md:flex-row justify-between gap-10 font-orbitron">
         <div className="md:w-1/2 text-sm text-gray-300 space-y-2 leading-relaxed">
           <p>
             <strong className="text-2xl">Corporate Office</strong>

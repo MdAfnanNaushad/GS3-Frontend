@@ -2,22 +2,20 @@ import { motion } from "framer-motion";
 
 const stats = [
   { label: "Clients Satisfied", value: "350+" },
-  { label: "Projects Completed", value: "120+" },
-  { label: "Years of Mastery", value: "5+" },
+  { label: "Projects Completed", value: "500+" },
+  { label: "Years of Mastery", value: "15+" },
   { label: "Team Members", value: "25+" },
 ];
 
 const About = () => {
   return (
     <div className="bg-transparent text-white font-orbitron px-6 md:px-20 py-20">
-      {/* Heading */}
       <div className="mb-20 mt-6">
-        <h1 className="font-orbitron text-nowrap  text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block shiny-text">
+        <h1 className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block shiny-text">
           About Us
         </h1>
       </div>
 
-      {/* Mission & Vision Section */}
       <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
         {/* Mission Image */}
         <motion.div
@@ -32,36 +30,37 @@ const About = () => {
           />
         </motion.div>
 
-        {/* Mission Text */}
         <div>
-          <h2 className="text-3xl font-semibold mb-6 font-orbitron text-nowrap  lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest inline">
+          <h2 className="text-3xl font-semibold mb-6 font-orbitron text-nowrap lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest inline">
             Our Mission
           </h2>
-          <p className="text-gray-400 leading-relaxed">
-            At GS3, our mission is to build scalable, innovative, and impactful
-            technology solutions tailored to modern-day business needs. We aim
-            to streamline digital transformation, enabling our clients to thrive
-            in a rapidly evolving technological landscape. We believe in
-            creating long-term value through robust software and a
-            human-centered approach to innovation.
-          </p>
+          <div className="mt-6">
+            <p className="text-gray-400 leading-relaxed">
+              At GS3, our mission is to build scalable, innovative, and
+              impactful technology solutions tailored to modern-day business
+              needs. We aim to streamline digital transformation, enabling our
+              clients to thrive in a rapidly evolving technological landscape.
+              We believe in creating long-term value through robust software and
+              a human-centered approach to innovation.
+            </p>
+          </div>
         </div>
 
-        {/* Vision Text */}
         <div>
-          <h2 className="font-orbitron text-nowrap  text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest font-semibold mb-6 inline">
+          <h2 className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest font-semibold mb-6 inline">
             Our Vision
           </h2>
-          <p className="text-gray-400 leading-relaxed">
-            We envision becoming a global leader in technology, setting new
-            benchmarks in innovation, transparency, and sustainability. By
-            fostering a culture of creativity, we strive to empower enterprises
-            and startups alike to scale with confidence—fueling digital growth
-            through excellence and trust.
-          </p>
+          <div className="mt-6">
+            <p className="text-gray-400 leading-relaxed">
+              We envision becoming a global leader in technology, setting new
+              benchmarks in innovation, transparency, and sustainability. By
+              fostering a culture of creativity, we strive to empower
+              enterprises and startups alike to scale with confidence—fueling
+              digital growth through excellence and trust.
+            </p>
+          </div>
         </div>
 
-        {/* Vision Image */}
         <motion.div
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.5 }}
@@ -75,7 +74,6 @@ const About = () => {
         </motion.div>
       </div>
 
-      {/* Stats Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center mt-16">
         {stats.map((stat, index) => (
           <motion.div
@@ -86,7 +84,6 @@ const About = () => {
             whileHover={{ scale: 1.05 }}
             className="bg-gray-900/60 border border-gray-700 backdrop-blur-sm rounded-xl py-10 relative overflow-hidden group"
           >
-            {/* Shine Animation */}
             <div className="absolute inset-0 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] group-hover:before:animate-shimmer rounded-xl" />
             <h3 className="text-3xl font-bold text-white relative z-10">
               {stat.value}

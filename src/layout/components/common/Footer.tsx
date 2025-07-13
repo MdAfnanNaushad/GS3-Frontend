@@ -20,21 +20,19 @@ const Footer = () => {
   };
 
   useEffect(() => {
-  const handleResize = () => {
-    const isNowMobile = window.innerWidth < 768;
-    setIsMobile(isNowMobile);
+    const handleResize = () => {
+      const isNowMobile = window.innerWidth < 768;
+      setIsMobile(isNowMobile);
 
-    
-    if (isNowMobile) {
-      requestAnimationFrame(() => setOpenSection(null));
-    }
-  };
+      if (isNowMobile) {
+        requestAnimationFrame(() => setOpenSection(null));
+      }
+    };
 
-  handleResize(); 
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const FooterSection = ({
     title,

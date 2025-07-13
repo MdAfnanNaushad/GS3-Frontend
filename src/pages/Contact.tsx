@@ -3,16 +3,13 @@ import { motion } from "framer-motion";
 const Contact = () => {
   return (
     <div className="bg-black text-white font-orbitron px-6 md:px-20 py-20 min-h-screen flex flex-col justify-center">
-      {/* Heading */}
       <div className="mb-15 mt-6 flex justify-center xl:justify-start">
         <h1 className="text-3xl font-semibold font-orbitron text-nowrap lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest ">
           Contact Us
         </h1>
       </div>
 
-      {/* Grid Layout (Form Left, Image Right) */}
       <div className="grid md:grid-cols-2 gap-16 items-center">
-        {/* Form */}
         <form className="w-full space-y-6 order-2 md:order-1">
           <div>
             <label className="block text-xl font-bold mb-2 text-gray-400">
@@ -54,8 +51,6 @@ const Contact = () => {
             Send Message
           </button>
         </form>
-
-        {/* Image */}
         <motion.div
           whileHover={{ scale: 1.03 }}
           transition={{ duration: 0.5 }}

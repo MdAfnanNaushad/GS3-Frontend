@@ -1,50 +1,75 @@
-function Contact() {
+import { motion } from "framer-motion";
+
+const Contact = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  text-white">
-      <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-      <p className="text-lg text-gray-700 mb-8">
-        We would love to hear from you! Please fill out the form below.
-      </p>
-      <form className="w-full max-w-md">
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Name
-          </label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your Name"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your Email"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Message
-          </label>
-          <textarea
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your Message"
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+    <div className="bg-black text-white font-orbitron px-6 md:px-20 py-20 min-h-screen flex flex-col justify-center">
+      {/* Heading */}
+      <div className="mb-15 mt-6 flex justify-center xl:justify-start">
+        <h1 className="text-3xl font-semibold font-orbitron text-nowrap lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest ">
+          Contact Us
+        </h1>
+      </div>
+
+      {/* Grid Layout (Form Left, Image Right) */}
+      <div className="grid md:grid-cols-2 gap-16 items-center">
+        {/* Form */}
+        <form className="w-full space-y-6 order-2 md:order-1">
+          <div>
+            <label className="block text-xl font-bold mb-2 text-gray-400">
+              Name
+            </label>
+            <input
+              type="text"
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="Your Name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xl font-bold mb-2 text-gray-400">
+              Email
+            </label>
+            <input
+              type="email"
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="Your Email"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xl font-bold mb-2 text-gray-400">
+              Message
+            </label>
+            <textarea
+              rows={5}
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="Your Message"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-white cursor-pointer text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-700 hover:text-gray-200 transition duration-600 w-full"
+          >
+            Send Message
+          </button>
+        </form>
+
+        {/* Image */}
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          transition={{ duration: 0.5 }}
+          className="overflow-hidden rounded-xl border border-gray-700 shadow-lg order-1 md:order-2"
         >
-          Send Message
-        </button>
-      </form>
+          <img
+            src="https://t4.ftcdn.net/jpg/03/37/96/33/240_F_337963325_EJuPjWslX3vAFxJ59L3y1cm6IsSfo07s.jpg"
+            alt="Contact Illustration"
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
+      </div>
     </div>
   );
-}
+};
 
 export default Contact;

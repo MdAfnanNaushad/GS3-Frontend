@@ -135,7 +135,7 @@ const Footer = () => {
               placeholder="Your email"
               className="px-4 py-2 w-full text-white placeholder:text-gray-300 bg-transparent focus:outline-none"
             />
-            <button className="px-4 py-2 text-white bg-gray-800 transition hover:bg-gray-700">
+            <button className="px-4 py-2 text-white bg-gray-800 transition hover:bg-gray-700 cursor-pointer">
               &rarr;
             </button>
           </div>

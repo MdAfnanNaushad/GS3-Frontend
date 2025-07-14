@@ -1,3 +1,4 @@
+import { WorldMap } from "@/components/ui/worldMap";
 import { motion } from "framer-motion";
 
 const Contact = () => {
@@ -12,34 +13,34 @@ const Contact = () => {
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <form className="w-full space-y-6 order-2 md:order-1">
           <div>
-            <label className="block text-xl font-bold mb-2 text-gray-400">
+            <label className="block text-xl font-bold mb-2 text-gray-400 font-sans">
               Name
             </label>
             <input
               type="text"
-              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white font-sans"
               placeholder="Your Name"
             />
           </div>
 
           <div>
-            <label className="block text-xl font-bold mb-2 text-gray-400">
+            <label className="block text-xl font-bold mb-2 text-gray-400 font-sans">
               Email
             </label>
             <input
               type="email"
-              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white font-sans"
               placeholder="Your Email"
             />
           </div>
 
           <div>
-            <label className="block text-xl font-bold mb-2 text-gray-400">
+            <label className="block text-xl font-bold mb-2 text-gray-400 font-sans">
               Message
             </label>
             <textarea
               rows={5}
-              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white"
+              className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white font-sans"
               placeholder="Your Message"
             ></textarea>
           </div>
@@ -56,10 +57,37 @@ const Contact = () => {
           transition={{ duration: 0.5 }}
           className="overflow-hidden rounded-xl border border-gray-700 shadow-lg order-1 md:order-2"
         >
-          <img
-            src="https://t4.ftcdn.net/jpg/03/37/96/33/240_F_337963325_EJuPjWslX3vAFxJ59L3y1cm6IsSfo07s.jpg"
-            alt="Contact Illustration"
-            className="w-full h-full object-cover"
+          <WorldMap
+            dots={[
+              {
+                start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+                end: { lat: 51.5074, lng: -0.1278 }, // London
+              },
+              {
+                start: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+                end: { lat: -33.8688, lng: 151.2093 }, // Sydney
+              },
+              {
+                start: { lat: 19.076, lng: 72.8777 }, // Mumbai
+                end: { lat: 37.7749, lng: -122.4194 }, // San Francisco
+              },
+              {
+                start: { lat: 40.7128, lng: -74.006 }, // New York
+                end: { lat: 55.7558, lng: 37.6173 }, // Moscow
+              },
+              {
+                start: { lat: 33.4484, lng: -112.074 }, // Phoenix, Arizona
+                end: { lat: 35.6895, lng: 139.6917 }, // Tokyo
+              },
+              {
+                start: { lat: 41.9028, lng: 12.4964 }, // Rome
+                end: { lat: 28.6139, lng: 77.209 }, // New Delhi
+              },
+              {
+                start: { lat: 1.3521, lng: 103.8198 }, // Singapore
+                end: { lat: 19.076, lng: 72.8777 }, // Mumbai
+              },
+            ]}
           />
         </motion.div>
       </div>

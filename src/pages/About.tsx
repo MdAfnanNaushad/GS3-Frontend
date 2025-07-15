@@ -23,7 +23,7 @@ const About = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center mt-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center ">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
@@ -46,13 +46,13 @@ const About = () => {
       </div>
 
       {/* Timeline Section */}
-      <div className="mt-28">
+      <div className="mt-15">
         <motion.h2
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block mb-10"
+          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block "
         >
           Our Journey
         </motion.h2>
@@ -74,7 +74,7 @@ const About = () => {
               content: (
                 <div className="pb-4">
                   <TextGenerateEffect
-                    className="pb-4"
+                    className="pb-6 font-semibold"
                     duration={0.5}
                     words="GS3 was born as a small development collective, united by a passion to craft elegant and purposeful software solutions for local businesses."
                   />
@@ -106,9 +106,9 @@ const About = () => {
                 </motion.div>
               ),
               content: (
-                <div className="pb-4">
+                <div className="pb-6 font-semibold ">
                   <TextGenerateEffect
-                    className="pb-4"
+                    className="pb-4 font-semibold"
                     words="With a growing team and refined vision, GS3 expanded into enterprise services, delivering full-stack solutions to startups and established firms across India."
                   />
                   <div className="grid grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ const About = () => {
               content: (
                 <div className="pb-4">
                   <TextGenerateEffect
-                    className="pb-4"
+                    className="pb-6 font-semibold"
                     words="GS3 began collaborating with international partners, scaling its infrastructure and adopting agile methodologies to meet global demands."
                   />
                   <div className="grid grid-cols-2 gap-4">
@@ -174,7 +174,7 @@ const About = () => {
               content: (
                 <div className="pb-4">
                   <TextGenerateEffect
-                    className="pb-4"
+                    className="pb-6 font-semibold"
                     words="Establishing itself as a tech innovation hub, GS3 launched in-house platforms, adopted cutting-edge technologies, and fostered a culture of creativity and impact."
                   />
                   <div className="grid grid-cols-2 gap-4">

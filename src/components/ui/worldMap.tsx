@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import DottedMap from "dotted-map";
 
-
 interface MapProps {
   dots?: Array<{
     start: { lat: number; lng: number; label?: string };
@@ -13,23 +12,26 @@ interface MapProps {
   lineColor?: string;
 }
 
-export function WorldMap({
-  dots = [],
-  lineColor = "#0ea5e9",
-}: MapProps) {
+export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const map = new DottedMap({ height: 120, grid: "diagonal" }); // Increased resolution
 
   const svgMap = map.getSVG({
     radius: 0.25,
-   color: "#1e90ff70", // White dots (semi-transparent)
+    color: "#1e90ff70", // White dots (semi-transparent)
     shape: "circle",
     backgroundColor: "#000000", // Black background
   });
 
   const projectPoint = (lat: number, lng: number) => {
-    const x = (lng + 180) * (900 / 360); // Widened viewBox
-    const y = (90 - lat) * (450 / 180);  // Taller viewBox
+    // Manually adjust Kolkata origin projection to match svgMap rendering
+    const viewBoxWidth = 900;
+    const viewBoxHeight = 450;
+
+    // Tailor projection to align Kolkata correctly in the viewBox
+    const x = ((lng + 180) / 360) * viewBoxWidth; // -180 to 180 → 0 to 900
+    const y = ((90 - lat) / 180) * viewBoxHeight; // 90 to -90 → 0 to 450
+
     return { x, y };
   };
 
@@ -43,7 +45,7 @@ export function WorldMap({
   };
 
   return (
-    <div className="w-full h-100 aspect-[2.5/1] bg-black rounded-lg relative font-sans">
+    <div className="w-full  aspect-[2.5/1]  rounded-lg relative font-sans">
       {/* SVG map image */}
       <img
         src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
@@ -58,7 +60,7 @@ export function WorldMap({
       <svg
         ref={svgRef}
         viewBox="0 0 900 450"
-        className="w-full h-full absolute inset-0 pointer-events-none select-none"
+        className="absolute inset-0 w-full h-full pointer-events-none"
       >
         <defs>
           <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">

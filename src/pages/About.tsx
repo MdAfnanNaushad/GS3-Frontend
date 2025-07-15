@@ -14,16 +14,31 @@ const stats = [
 
 const About = () => {
   return (
-    <div className="bg-transparent text-white font-orbitron px-6 md:px-20 py-20">
+    <div className="relative bg-transparent text-white font-orbitron px-6 md:px-20 py-20">
+      <div className="absolute top-0 left-0 w-full h-[500px] -z-10 overflow-hidden">
+        <img
+          src="https://t4.ftcdn.net/jpg/03/14/81/65/240_F_314816591_yBAWvMvnpTW05AP0q4DCs5B6y2gnL9xA.jpg" // Replace with actual image path
+          alt="About Hero"
+          className="w-full h-full object-cover opacity-50"
+        />
+      </div>
+
       {/* Heading */}
       <div className="mb-20 mt-6">
-        <h1 className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block shiny-text">
+        <h1 className="font-orbitron flex text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-start text-border-white tracking-widest relative ">
           About Us
         </h1>
+        <p className="text-gray-400   max-w-3xl mt-4 font-sans text-xl text-wrap">
+          GS3 is a forward-thinking digital solutions company dedicated to
+          building scalable, high-performance products that empower businesses
+          across industries. Our journey from a small team of developers to a
+          global innovation hub reflects our commitment to excellence,
+          creativity, and impact-driven work.
+        </p>
       </div>
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center mt-24">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
@@ -52,7 +67,7 @@ const About = () => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block "
+          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block mt-5"
         >
           Our Journey
         </motion.h2>

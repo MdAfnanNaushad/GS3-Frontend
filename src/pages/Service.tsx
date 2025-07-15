@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 
 const services = [
@@ -36,7 +38,6 @@ const services = [
     image:
       "https://t4.ftcdn.net/jpg/14/87/24/35/240_F_1487243560_gvXhflbfIls6lalm24asgoiT5GQTakMv.jpg",
   },
-
   {
     title: "SEO Optimization",
     description:
@@ -48,14 +49,31 @@ const services = [
 
 const Service = () => {
   return (
-    <div className="bg-transparent text-white font-orbitron px-6 md:px-20 py-20 min-h-screen">
-      <div className="mb-20 mt-6 flex justify-center xl:justify-end">
-        <h1 className="text-3xl font-semibold  font-orbitron text-nowrap  lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest inline">
-          Our Services
-        </h1>
+    <div className="relative bg-transparent text-white font-orbitron px-6 md:px-20 py-20 min-h-screen">
+      {/* Hero Background Image */}
+      <div className="absolute top-0 left-0 w-full h-[500px] -z-10 overflow-hidden">
+        <img
+          src="https://t3.ftcdn.net/jpg/04/70/11/64/240_F_470116460_gG4tviMXUKBQ9GR6TysvK7EqGl06PS5X.jpg" // Replace with your actual image path
+          alt="Services Hero"
+          className="w-full h-full object-cover opacity-50"
+        />
       </div>
 
-      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+      {/* Heading */}
+      <div className="mb-20 mt-6">
+        <h1 className="text-3xl font-semibold font-orbitron text-nowrap lg:text-4xl xl:text-5xl text-border-white tracking-widest inline">
+          Our Services
+        </h1>
+        <p className="text-gray-400  max-w-3xl text-xl mt-6 font-sans text-wrap">
+          At GS3, we provide a range of cutting-edge digital services — from
+          responsive websites and mobile apps to creative UI/UX design and
+          performance-driven marketing — helping businesses grow in a connected
+          world.
+        </p>
+      </div>
+
+      {/* Services Grid */}
+      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3 relative z-10 mt-40">
         {services.map((service, idx) => (
           <motion.div
             key={idx}

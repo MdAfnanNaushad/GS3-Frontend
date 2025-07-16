@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { Timeline } from "@/components/ui/timeline";
 import CountUp from "@/components/reactbits/CountUp";
 import { TextGenerateEffect } from "@/components/ui/text-generate";
@@ -12,12 +13,34 @@ const stats = [
   { label: "Team Members", value: "25+" },
 ];
 
+const ParagraphWithEffect = ({ words }: { words: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (isInView) setShow(true);
+  }, [isInView]);
+
+  return (
+    <div ref={ref}>
+      {show && (
+        <TextGenerateEffect
+          className="pb-6 font-semibold"
+          duration={0.5}
+          words={words}
+        />
+      )}
+    </div>
+  );
+};
+
 const About = () => {
   return (
     <div className="relative bg-transparent text-white font-orbitron px-6 md:px-20 py-20">
       <div className="absolute top-0 left-0 w-full h-[500px] -z-10 overflow-hidden">
         <img
-          src="https://t4.ftcdn.net/jpg/03/14/81/65/240_F_314816591_yBAWvMvnpTW05AP0q4DCs5B6y2gnL9xA.jpg" // Replace with actual image path
+          src="https://t4.ftcdn.net/jpg/03/14/81/65/240_F_314816591_yBAWvMvnpTW05AP0q4DCs5B6y2gnL9xA.jpg"
           alt="About Hero"
           className="w-full h-full object-cover opacity-50"
         />
@@ -28,7 +51,7 @@ const About = () => {
         <h1 className="font-orbitron flex text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-start text-border-white tracking-widest relative ">
           About Us
         </h1>
-        <p className="text-gray-400   max-w-3xl mt-4 font-sans text-xl text-wrap">
+        <p className="text-gray-400 max-w-3xl mt-4 font-sans text-xl text-wrap">
           GS3 is a forward-thinking digital solutions company dedicated to
           building scalable, high-performance products that empower businesses
           across industries. Our journey from a small team of developers to a
@@ -88,11 +111,7 @@ const About = () => {
               ),
               content: (
                 <div className="pb-4">
-                  <TextGenerateEffect
-                    className="pb-6 font-semibold"
-                    duration={0.5}
-                    words="GS3 was born as a small development collective, united by a passion to craft elegant and purposeful software solutions for local businesses."
-                  />
+                  <ParagraphWithEffect words="GS3 was born as a small development collective, united by a passion to craft elegant and purposeful software solutions for local businesses." />
                   <div className="grid grid-cols-2 gap-4">
                     <img
                       src="https://t3.ftcdn.net/jpg/11/56/13/94/240_F_1156139414_Fy8grgEuMbfycZTwO9iImj0GJmU29Z7K.jpg"
@@ -122,10 +141,7 @@ const About = () => {
               ),
               content: (
                 <div className="pb-6 font-semibold ">
-                  <TextGenerateEffect
-                    className="pb-4 font-semibold"
-                    words="With a growing team and refined vision, GS3 expanded into enterprise services, delivering full-stack solutions to startups and established firms across India."
-                  />
+                  <ParagraphWithEffect words="With a growing team and refined vision, GS3 expanded into enterprise services, delivering full-stack solutions to startups and established firms across India." />
                   <div className="grid grid-cols-2 gap-4">
                     <img
                       src="https://t4.ftcdn.net/jpg/13/26/99/13/240_F_1326991312_EA1i0pldwnif8jzB7Lb7mXy4VUcOdEiM.jpg"
@@ -155,10 +171,7 @@ const About = () => {
               ),
               content: (
                 <div className="pb-4">
-                  <TextGenerateEffect
-                    className="pb-6 font-semibold"
-                    words="GS3 began collaborating with international partners, scaling its infrastructure and adopting agile methodologies to meet global demands."
-                  />
+                  <ParagraphWithEffect words="GS3 began collaborating with international partners, scaling its infrastructure and adopting agile methodologies to meet global demands." />
                   <div className="grid grid-cols-2 gap-4">
                     <img
                       src="https://t3.ftcdn.net/jpg/12/49/19/16/240_F_1249191643_B1cFjVpx8Ac72CJkepX3iDxqfsdW5WCp.jpg"
@@ -188,10 +201,7 @@ const About = () => {
               ),
               content: (
                 <div className="pb-4">
-                  <TextGenerateEffect
-                    className="pb-6 font-semibold"
-                    words="Establishing itself as a tech innovation hub, GS3 launched in-house platforms, adopted cutting-edge technologies, and fostered a culture of creativity and impact."
-                  />
+                  <ParagraphWithEffect words="Establishing itself as a tech innovation hub, GS3 launched in-house platforms, adopted cutting-edge technologies, and fostered a culture of creativity and impact." />
                   <div className="grid grid-cols-2 gap-4">
                     <img
                       src="https://t3.ftcdn.net/jpg/12/30/74/52/240_F_1230745224_trm0WXcboik91UeCD1B5KV9EG2T6pafT.jpg"

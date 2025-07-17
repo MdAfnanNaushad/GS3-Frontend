@@ -80,7 +80,7 @@ function App() {
             <Route path="/case-studies/project5" element={<Project5 />} />
             <Route path="/case-studies/project6" element={<Project6 />} />
 
-            <Route path="/admin" element={<AdminPage/>}/>
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </TransitionProvider>
       </Layout>

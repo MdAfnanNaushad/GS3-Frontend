@@ -17,6 +17,7 @@ import Project5 from "./layout/components/CaseStudies/Project5";
 import Project6 from "./layout/components/CaseStudies/Project6";
 import Project1 from "./layout/components/CaseStudies/Project1";
 import Project2 from "./layout/components/CaseStudies/Project2";
+import AdminPage from "./pages/AdminPage";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
 function App() {
   const [loading, setLoading] = useState(true);
@@ -78,6 +79,8 @@ function App() {
             <Route path="/case-studies/project4" element={<Project4 />} />
             <Route path="/case-studies/project5" element={<Project5 />} />
             <Route path="/case-studies/project6" element={<Project6 />} />
+
+            <Route path="/admin" element={<AdminPage/>}/>
           </Routes>
         </TransitionProvider>
       </Layout>

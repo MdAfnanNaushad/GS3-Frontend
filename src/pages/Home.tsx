@@ -24,10 +24,16 @@ const Home = () => {
             </h2>
           </div>
           <Projects />
-          <Testimonial/>
-
-          <Team/>
-
+          <div className="w-full flex justify-center py-6">
+            <a
+              href="/all-projects"
+              className="bg-white text-black border border-black px-6 py-2 rounded-md hover:bg-black hover:text-white transition"
+            >
+              View More
+            </a>
+          </div>
+          <Testimonial />
+          <Team />
         </div>
       </div>
     </main>

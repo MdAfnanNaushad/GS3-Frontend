@@ -23,7 +23,7 @@ function Hero() {
             <div className="flex justify-center gap-4 items-center mt-4">
               <Button
                 variant="default"
-                className="font-orbitron border-[1px] border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-md cursor-pointer backdrop-blur-[1px] duration-700"
+                className="font-orbitron border-[1px] border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-md cursor-pointer backdrop-blur-[1px] duration-700 hover:text-neutral-800"
               >
                 {" "}
                 Contact Us

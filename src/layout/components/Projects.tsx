@@ -26,7 +26,7 @@ const Skeleton = () => (
   /*image url and other links will be provided after review*/
 }
 
-const items = [
+export const items = [
   {
     title: "The Dawn of Innovation",
     description: "Explore the birth of groundbreaking ideas and inventions.",

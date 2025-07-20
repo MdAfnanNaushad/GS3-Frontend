@@ -29,7 +29,7 @@ const TimelineItem = ({ title, content }: TimelineEntry) => {
        
         <div
           className={cn(
-            "h-10 absolute left-3 md:left-3 w-10 rounded-full flex items-center justify-center transition-all duration-500",
+            "h-10 absolute left-3 md:left-3 w-10 rounded-full flex items-center justify-center transition-all duration-100",
             isInView ? "border-4" : ""
           )}
           style={
@@ -47,7 +47,7 @@ const TimelineItem = ({ title, content }: TimelineEntry) => {
           <div className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 p-2" />
         </div>
 
-        <h3 className="hidden md:block text-xl md:pl-20 md:text-5xl font-bold text-neutral-500 dark:text-neutral-500">
+        <h3 className="hidden md:block text-xl md:pl-20 md:text-5xl font-bold text-gray-300 dark:text-gray-300">
           {title}
         </h3>
       </div>
@@ -76,7 +76,7 @@ export const Timeline = ({ data, className }: TimelineProps) => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 90%", "end 80%"],
+    offset: ["start 60%", "end 30%"],
   });
 
   const heightTransform = useTransform(scrollYProgress, [0, 1], [1, height]);
@@ -85,12 +85,12 @@ export const Timeline = ({ data, className }: TimelineProps) => {
   return (
     <div
       className={cn(
-        "w-full bg-white dark:bg-transparent font-sans md:px-2",
+        "w-full bg-white dark:bg-transparent font-sans md:px-2 ",
         className
       )}
       ref={containerRef}
     >
-      <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
+      <div ref={ref} className="relative mx-auto pb-20 ">
         {data.map((item, index) => (
           <TimelineItem key={index} title={item.title} content={item.content} />
         ))}

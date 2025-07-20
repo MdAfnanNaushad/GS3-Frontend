@@ -1,52 +1,52 @@
 "use client";
 import { WorldMap } from "@/components/ui/worldMap";
-// import { motion } from "framer-motion";
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const Contact = () => {
   return (
-    <div className="relative w-full min-h-screen font-orbitron bg-transparent ">
-      {/* Background Map */}
-      <div className="absolute top-0 left-0 w-full h-full z-0  pointer-events-none">
+    <div className="relative w-full min-h-screen  bg-transparent">
+      <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
         <WorldMap
           dots={[
             {
-              start: { lat: 22.5726, lng: 88.3639 }, // Kolkata
+              start: { lat: 12.8726, lng: 108.3639 }, // Kolkata
               end: { lat: 51.5074, lng: -0.1278 }, // London
             },
             {
-              start: { lat: 22.5726, lng: 88.3639 },
+              start: { lat: 12.8726, lng: 108.3639 },
               end: { lat: 40.7128, lng: -74.006 }, // New York
             },
             {
-              start: { lat: 22.5726, lng: 88.3639 },
+              start: { lat: 12.8726, lng: 108.3639 },
               end: { lat: 35.6895, lng: 139.6917 }, // Tokyo
             },
             {
-              start: { lat: 22.5726, lng: 88.3639 },
+              start: { lat: 12.8726, lng: 108.3639 },
               end: { lat: 37.7749, lng: -122.4194 }, // San Francisco
             },
             {
-              start: { lat: 22.5726, lng: 88.3639 },
+              start: { lat: 12.8726, lng: 108.3639 },
               end: { lat: -33.8688, lng: 151.2093 }, // Sydney
             },
           ]}
         />
       </div>
 
-      {/* Foreground Contact Content */}
-      <div className=" z-10 px-6 md:px-20 py-20 text-white min-h-screen flex flex-col justify-center">
+      {/* Contact Section */}
+      <div className="z-10 px-6 md:px-20 py-20 text-white min-h-screen flex flex-col">
         <div className="mb-12 text-center md:text-left">
-          <h1 className="text-3xl font-semibold lg:text-4xl xl:text-5xl tracking-widest font-orbitron flex text-nowrap  justify-center xl:justify-start text-border-white  relative">
+          <h1 className="text-3xl font-semibold lg:text-4xl xl:text-5xl tracking-widest font-orbitron flex text-nowrap justify-center xl:justify-start text-border-white relative">
             Contact Us
           </h1>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <form className="w-full space-y-6 order-2 md:order-1">
+        {/* Centered Form Only */}
+        <div className="flex flex-1 justify-center items-center">
+          <form className="w-full max-w-lg space-y-6">
             <div>
-              <Label className="text-xl mb-2 text-gray-300 font-sans">
+              <Label className="text-xl mb-2 text-gray-300 font-sans ">
                 Name
               </Label>
               <Input type="text" placeholder="Your Name" />
@@ -63,7 +63,7 @@ const Contact = () => {
               <Label className="text-xl mb-2 text-gray-300 font-sans">
                 Message
               </Label>
-              <textarea
+              <Textarea
                 rows={5}
                 className="w-full px-4 py-3 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-white font-sans"
                 placeholder="Your Message"
@@ -77,14 +77,6 @@ const Contact = () => {
               Send Message
             </button>
           </form>
-
-          {/* <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.5 }}
-            className="overflow-hidden rounded-xl border border-gray-700 shadow-lg order-1 md:order-2"
-          >
-            {/* Optional: Display another WorldMap or image here */}
-          {/* </motion.div> */}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ const stats = [
 const ParagraphWithEffect = ({ words }: { words: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
     if (isInView) setShow(true);
@@ -51,7 +51,7 @@ const About = () => {
         <h1 className="font-orbitron flex text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-start text-border-white tracking-widest relative ">
           About Us
         </h1>
-        <p className="text-gray-400 max-w-3xl mt-4 font-sans text-xl text-wrap">
+        <p className="text-gray-400  max-w-3xl mt-4 font-sans text-xl text-wrap">
           GS3 is a forward-thinking digital solutions company dedicated to
           building scalable, high-performance products that empower businesses
           across industries. Our journey from a small team of developers to a
@@ -84,13 +84,13 @@ const About = () => {
       </div>
 
       {/* Timeline Section */}
-      <div className="mt-15">
+      <div className="mt-15 max-w-8xl">
         <motion.h2
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block mt-5"
+          className="font-orbitron text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-end text-border-white tracking-widest relative inline-block mt-5 max-w-8xl"
         >
           Our Journey
         </motion.h2>
@@ -110,18 +110,18 @@ const About = () => {
                 </motion.div>
               ),
               content: (
-                <div className="pb-4">
+                <div className="pb-4 font-semibold">
                   <ParagraphWithEffect words="GS3 was born as a small development collective, united by a passion to craft elegant and purposeful software solutions for local businesses." />
                   <div className="grid grid-cols-2 gap-4">
                     <img
                       src="https://t3.ftcdn.net/jpg/11/56/13/94/240_F_1156139414_Fy8grgEuMbfycZTwO9iImj0GJmU29Z7K.jpg"
                       alt="Global Partner"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40  hover:scale-110 transition-all duration-400"
                     />
                     <img
                       src="https://t4.ftcdn.net/jpg/09/19/68/09/240_F_919680978_ent4C9CWDuG4tQminaJ1wRdAqoY072ky.jpg"
                       alt="Agile Team"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                   </div>
                 </div>
@@ -146,12 +146,12 @@ const About = () => {
                     <img
                       src="https://t4.ftcdn.net/jpg/13/26/99/13/240_F_1326991312_EA1i0pldwnif8jzB7Lb7mXy4VUcOdEiM.jpg"
                       alt="Expansion"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                     <img
                       src="https://t4.ftcdn.net/jpg/09/31/35/57/240_F_931355760_dCpsHFaQgzsJn28oNgI6lrpa2pc8KFUe.jpg"
                       alt="Teamwork"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                   </div>
                 </div>
@@ -172,16 +172,16 @@ const About = () => {
               content: (
                 <div className="pb-4">
                   <ParagraphWithEffect words="GS3 began collaborating with international partners, scaling its infrastructure and adopting agile methodologies to meet global demands." />
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4 ">
                     <img
                       src="https://t3.ftcdn.net/jpg/12/49/19/16/240_F_1249191643_B1cFjVpx8Ac72CJkepX3iDxqfsdW5WCp.jpg"
                       alt="Global Expansion"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                     <img
                       src="https://t4.ftcdn.net/jpg/15/38/12/07/240_F_1538120741_Td6xXV1WIh4xrJ4pVQVNYYTvxAZtZa8M.jpg"
                       alt="Innovation"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                   </div>
                 </div>
@@ -206,19 +206,19 @@ const About = () => {
                     <img
                       src="https://t3.ftcdn.net/jpg/12/30/74/52/240_F_1230745224_trm0WXcboik91UeCD1B5KV9EG2T6pafT.jpg"
                       alt="Tech Launch"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                     <img
                       src="https://t3.ftcdn.net/jpg/14/63/79/88/240_F_1463798852_lNO40ntTqlNeyk71Cv0OLNJRz3PNbbHL.jpg"
                       alt="Creative Culture"
-                      className="rounded-lg object-cover w-full h-40"
+                      className="rounded-lg object-cover w-full h-40 hover:scale-110 transition-all duration-400"
                     />
                   </div>
                 </div>
               ),
             },
           ]}
-          className="max-w-4xl ml-0"
+          className=" ml-0"
         />
       </div>
     </div>

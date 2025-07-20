@@ -3,8 +3,19 @@
 import { motion } from "framer-motion";
 import { TextGenerateEffect as TextGenerate } from "../../../components/ui/text-generate";
 import case1 from "../../../assets/case_study_image/case1.png";
-import dawn from "../../../assets/case_study_image/dawn.png";
 import FlowingMenu from "../../../components/reactbits/FlowingMenu";
+import { StickyScroll } from "@/components/ui/stick-scroll-reveal";
+import {
+  Users,
+  FileText,
+  CheckCircle,
+  Palette,
+  Monitor,
+  FlaskConical,
+  Phone,
+  Server,
+  Bug,
+} from "lucide-react";
 
 const headingVariants = {
   hidden: { x: -50, opacity: 0 },
@@ -13,7 +24,7 @@ const headingVariants = {
     opacity: 1,
     transition: {
       duration: 0.6,
-      ease: "easeInOut" as const, // 👈 fix here
+      ease: "easeInOut" as const,
     },
   },
 };
@@ -46,9 +57,59 @@ const Project1 = () => {
     },
   ];
 
+  const highlights = [
+    {
+      title: "Next-Gen Web Experiences",
+      description:
+        "GS3 redefines web development by fusing performance with sleek, interactive design, ensuring users stay engaged and brands stand out.",
+      content: (
+        <img
+          src="https://t3.ftcdn.net/jpg/12/30/63/70/240_F_1230637063_hQuWGp4SYiCuZkagRznBfhqWuEn2ginN.jpg"
+          alt="Next-Gen Web Experience"
+          className="h-full w-full object-cover rounded-md"
+        />
+      ),
+    },
+    {
+      title: "Robust & Scalable Systems",
+      description:
+        "Engineered with scalability in mind, GS3 supports growing business needs without compromising on speed, flexibility, or user experience.",
+      content: (
+        <img
+          src="https://t3.ftcdn.net/jpg/14/51/67/88/240_F_1451678873_zYHJodYguCa4NUHw1YGCTF4bgCD3Igm0.jpg"
+          alt="Scalable Systems"
+          className="h-full w-full object-cover rounded-md"
+        />
+      ),
+    },
+    {
+      title: "User-Centric Development",
+      description:
+        "Every feature in GS3 is designed around real-world user behavior, providing intuitive workflows and seamless interactions across devices.",
+      content: (
+        <img
+          src="https://t4.ftcdn.net/jpg/12/00/50/03/240_F_1200500366_KFrZ2U1iq4Sw31oxFETutkCYtO9FPCmS.jpg"
+          alt="User-Centric Development"
+          className="h-full w-full object-cover rounded-md"
+        />
+      ),
+    },
+    {
+      title: "Innovation at the Core",
+      description:
+        "With cutting-edge tech stacks, modular design, and automation, GS3 leads digital innovation for modern startups and enterprises.",
+      content: (
+        <img
+          src="https://t4.ftcdn.net/jpg/15/51/88/99/240_F_1551889929_oj5LNRBHfIXO4fwLNqu4PjGlMfLJGcxT.jpg"
+          alt="Innovation Core"
+          className="h-full w-full object-cover rounded-md"
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="w-full text-white ">
-
       <div className="relative w-full min-h-screen py-20 px-4">
         <img
           src={case1}
@@ -57,20 +118,18 @@ const Project1 = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent -z-10" />
 
-        <div className="relative z-10 max-w-6xl mx-auto space-y-16">
-
+        <div className="relative z-10 max-w-6xl mx-auto space-y-16 mt-10">
           <div className=" space-y-6">
             <motion.h1
-              className=" md:text-6xl font-bold font-orbitron text-white"
+              className=" font-orbitron flex text-nowrap text-3xl lg:text-4xl xl:text-5xl justify-center xl:justify-start text-border-white tracking-widest relative max-w-6xl"
               variants={headingVariants}
               initial="hidden"
               animate="visible"
             >
-              Dawn of Innovation
+              The Dawn of Innovation
             </motion.h1>
             <TextGenerate words="A futuristic solution that bridges design with user experience, developed to scale for businesses worldwide." />
           </div>
-
 
           <div className="space-y-6">
             <motion.h2
@@ -80,12 +139,14 @@ const Project1 = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              📝 Description
+              <h2 className="text-3xl font-bold flex items-center gap-2 font-orbitron relative text-border-white tracking-widest ">
+                <FileText className="w-8 h-8 text-white" />
+                Description
+              </h2>
             </motion.h2>
             <TextGenerate words="We built a modern, responsive platform that streamlined user engagement and optimized internal workflows. Our approach included audience research, UI/UX planning, and scalable backend engineering." />
           </div>
 
-
           <div className="space-y-6">
             <motion.h2
               className="text-3xl font-bold text-white"
@@ -93,19 +154,33 @@ const Project1 = () => {
               initial="hidden"
               whileInView="visible"
             >
-              🤝 Team
+              <h2 className="text-3xl font-extrabold flex items-center gap-2 font-orbitron text-border-white tracking-widest">
+                <Users className="w-8 h-8  text-white" />
+                Team
+              </h2>
             </motion.h2>
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-y-3 text-lg text-neutral-300 pl-4 list-disc">
-              <li>🎨 UI/UX Design</li>
-              <li>💻 Frontend Development</li>
-              <li>🧪 QA Testing</li>
-              <li>📞 Client Communication</li>
-              <li>🛠️ Backend Engineering</li>
-              <li>🐛 Debugging</li>
+            <ul className="grid grid-cols-2 md:grid-cols-3 gap-y-3 text-lg text-neutral-300">
+              <li className="flex items-center gap-2">
+                <Palette className="w-5 h-5" /> UI/UX Design
+              </li>
+              <li className="flex items-center gap-2">
+                <Monitor className="w-5 h-5" /> Frontend Development
+              </li>
+              <li className="flex items-center gap-2">
+                <FlaskConical className="w-5 h-5" /> QA Testing
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="w-5 h-5" /> Client Communication
+              </li>
+              <li className="flex items-center gap-2">
+                <Server className="w-5 h-5" /> Backend Engineering
+              </li>
+              <li className="flex items-center gap-2">
+                <Bug className="w-5 h-5" /> Debugging
+              </li>
             </ul>
           </div>
 
-
           <div className="space-y-6">
             <motion.h2
               className="text-3xl font-bold text-white"
@@ -113,61 +188,23 @@ const Project1 = () => {
               initial="hidden"
               whileInView="visible"
             >
-              🏁 Result
+              <h2 className="text-3xl font-extrabold flex items-center gap-2  font-orbitron text-border-white tracking-widest">
+                <CheckCircle className="w-8 h-8 text-white" />
+                Result
+              </h2>
             </motion.h2>
             <TextGenerate words="A highly scalable and user-friendly platform that significantly increased client retention and conversion rates." />
           </div>
         </div>
       </div>
 
-
-      <div className="w-full bg-gray-600 py-16 mt-12">
-        <div className="max-w-6xl mx-auto px-4 space-y-12">
-          <TextGenerate words="In today's digital age, establishing a strong online presence is essential. One Terrific Link recognized this challenge and set out to revolutionize how people manage their online content — a vision echoed in initiatives like Dawn of Innovation and GS3." />
-          <div className="flex flex-col lg:flex-row gap-8 items-center">
-            <TextGenerate words="Our team’s dedication to innovation made this project a beacon of transformative design and functionality. The combined efforts resulted in an experience that is not only seamless and responsive but scalable for the future." />
-            <img
-              src={dawn}
-              alt="Dawn of Innovation"
-              className="w-full max-w-sm rounded-xl transition-transform duration-300 hover:scale-105 shadow-lg"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Red Section - Additional Images */}
-      <div className="w-full bg-gray-700   py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.h2
-            className="text-4xl font-bold mb-10"
-            variants={headingVariants}
-            initial="hidden"
-            whileInView="visible"
-          >
-            Project Highlights
-          </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              "https://media.istockphoto.com/id/543183018/photo/sunrise-on-mount-kanchenjugha-at-dawn-sikkim.jpg?s=612x612&w=0&k=20&c=ONnlaZ9ny-HD9P3li-5t0tzpm0dHdahYRdmN_WxrMsc=",
-              "https://media.istockphoto.com/id/920377882/photo/beautiful-landscape-with-high-mountains-with-illuminated-peaks-stones-in-mountain-lake.jpg?s=612x612&w=0&k=20&c=ppnPB3UoILzzxR48gcuUzZx92zepSwegQ-0NqfBDAzk=",
-              "https://media.istockphoto.com/id/2193639475/photo/landscape-view-of-gloomy-sunset-over-the-koshi-river-in-nepal.jpg?s=612x612&w=0&k=20&c=M5qshnRS9lNDNXw2QBJjQaBOcY5CI9iOlFhi8byTelg=",
-            ].map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Additional Image ${i + 1}`}
-                className="rounded-xl w-full h-64 object-cover transition-transform duration-300 hover:scale-105 shadow-md"
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <StickyScroll contentClassName="max-w-2xl" content={highlights} />
 
       {/* Flowing Menu Section */}
       <div className="w-full bg-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4">
           <motion.h2
-            className="text-5xl mb-12 font-bold"
+            className="text-5xl mb-12 font-bold font-orbitron text-border-white  tracking-widest"
             variants={headingVariants}
             initial="hidden"
             whileInView="visible"

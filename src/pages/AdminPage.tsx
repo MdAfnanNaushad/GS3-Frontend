@@ -10,6 +10,9 @@ import {
   Mail,
   Briefcase,
   UserCheck,
+  ShieldCheck,
+  Plus,
+  BookMarked,
 } from "lucide-react";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/sidebar";
 
@@ -39,6 +42,16 @@ const links = [
     label: "View Contacts",
     href: "/admin/contacts",
     icon: <Layers size={18} />,
+  },
+  {
+    label: "Add Project",
+    href: "/admin/add-project",
+    icon: <Plus size={18} />,
+  },
+  {
+    label: "Add Case Studies",
+    href: "/admin/add-case-studies",
+    icon: <BookMarked size={18} />,
   },
 ];
 
@@ -82,7 +95,7 @@ const cards = [
 
 export default function AdminPage() {
   return (
-    <div className="flex min-h-screen w-screen bg-transparent text-foreground mt-20">
+    <div className="flex min-h-screen w-screen bg-transparent text-foreground mt-16">
       {/* Sidebar */}
       <Sidebar>
         <SidebarBody>
@@ -98,7 +111,10 @@ export default function AdminPage() {
       <main className="flex-1 p-6 bg-transparent">
         {/* Top Navbar */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Hello Admin 👍</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <ShieldCheck className="text-green-500" size={24} />
+            Hello Admin
+          </h1>
           <button className="flex items-center gap-2 bg-white dark:bg-muted shadow px-4 py-2 rounded transition duration-300 hover:bg-red-500 text-white cursor-pointer hover:text-red-500 border border-red-500">
             <LogOut size={18} />
             Logout
@@ -118,7 +134,7 @@ export default function AdminPage() {
                 alt={card.title}
                 className="w-full h-52 object-cover z-0"
               />
-              <div className="absolute inset-0  bg-opacity-50 flex flex-col justify-between p-5 z-10">
+              <div className="absolute inset-0 bg-opacity-50 flex flex-col justify-between p-5 z-10">
                 <div className="flex justify-between items-center">
                   {card.icon}
                 </div>

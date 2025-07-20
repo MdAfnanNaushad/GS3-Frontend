@@ -27,7 +27,7 @@ const Home = () => {
           <div className="w-full flex justify-center py-6">
             <a
               href="/all-projects"
-              className="bg-white text-black border border-black px-6 py-2 rounded-md hover:bg-black hover:text-white transition"
+              className="bg-white font-orbitron text-black border border-black px-6 py-2 rounded-md hover:bg-gray-700 hover:text-white transition duration-500"
             >
               View More
             </a>

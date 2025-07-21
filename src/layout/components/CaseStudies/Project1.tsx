@@ -198,8 +198,11 @@ const Project1 = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-20">
-        <StickyScroll contentClassName="max-w-full sm:max-w-2xl" content={highlights} />
+      <div className="px-4 sm:px-6 lg:px-8">
+        <StickyScroll
+          contentClassName="max-w-full sm:max-w-2xl"
+          content={highlights}
+        />
       </div>
 
       <div className="w-full bg-gray-800 py-16">

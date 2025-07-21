@@ -49,7 +49,7 @@ const Textarea = React.forwardRef<
           placeholder:text-neutral-400 focus-visible:ring-[2px] focus-visible:ring-neutral-400 
           focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 
           dark:bg-black dark:text-white dark:shadow-[0px_0px_1px_1px_#404040] 
-          dark:focus-visible:ring-neutral-600`,
+          dark:focus-visible:ring-neutral-600 border-gray-300`,
           className
         )}
       />

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import {
   LogOut,
   UserPlus,
-  Trash2,
   BarChart2,
   ClipboardList,
   Layers,
@@ -17,37 +16,24 @@ import {
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/sidebar";
 
 const links = [
-  { label: "Dashboard", href: "/admin", icon: <BarChart2 size={18} /> },
+  { label: "Employee", href: "/admin/employee", icon: <UserPlus size={18} /> },
+  { label: "Projects", href: "/admin/projects", icon: <Plus size={18} /> },
   {
-    label: "Create Employee",
-    href: "/admin/create-employee",
-    icon: <UserPlus size={18} />,
-  },
-  {
-    label: "Delete Employee",
-    href: "/admin/delete-employee",
-    icon: <Trash2 size={18} />,
-  },
-  {
-    label: "Manage Timeline",
-    href: "/admin/manage-timeline",
+    label: "About Section",
+    href: "/admin/About",
     icon: <ClipboardList size={18} />,
   },
   {
-    label: "Manage Stats",
-    href: "/admin/manage-stats",
+    label: "Manage Services",
+    href: "/admin/services",
     icon: <BarChart2 size={18} />,
   },
   {
-    label: "View Contacts",
+    label: "Contacts Recieved",
     href: "/admin/contacts",
     icon: <Layers size={18} />,
   },
-  {
-    label: "Add Project",
-    href: "/admin/add-project",
-    icon: <Plus size={18} />,
-  },
+  { label: "Logged In", href: "/admin/view", icon: <Plus size={18} /> },
   {
     label: "Add Case Studies",
     href: "/admin/add-case-studies",
@@ -95,7 +81,7 @@ const cards = [
 
 export default function AdminPage() {
   return (
-    <div className="flex min-h-screen w-screen bg-transparent text-foreground mt-16">
+    <div className="flex min-h-screen w-screen bg-background text-foreground mt-16">
       {/* Sidebar */}
       <Sidebar>
         <SidebarBody>
@@ -108,43 +94,42 @@ export default function AdminPage() {
       </Sidebar>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 bg-transparent">
-        {/* Top Navbar */}
+      <main className="flex-1 p-6 bg-background text-foreground">
+        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <ShieldCheck className="text-green-500" size={24} />
             Hello Admin
           </h1>
-          <button className="flex items-center gap-2 bg-white dark:bg-muted shadow px-4 py-2 rounded transition duration-300 hover:bg-red-500 text-white cursor-pointer hover:text-red-500 border border-red-500">
+          <button className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow">
             <LogOut size={18} />
             Logout
           </button>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        {/* Card Grid */}
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
           {cards.map((card, idx) => (
             <div
               key={idx}
-              className="relative overflow-hidden rounded-xl shadow-md"
-              style={{ minHeight: "14rem" }}
+              className="relative overflow-hidden rounded-2xl shadow-lg bg-muted dark:bg-muted/50"
+              style={{ minHeight: "20rem" }}
             >
               <img
                 src={card.image}
                 alt={card.title}
-                className="w-full h-52 object-cover z-0"
+                className="w-full h-60 object-cover opacity-90"
               />
-              <div className="absolute inset-0 bg-opacity-50 flex flex-col justify-between p-5 z-10">
-                <div className="flex justify-between items-center">
-                  {card.icon}
-                </div>
+              <div className="absolute inset-0 bg-black/60 p-6 flex flex-col justify-between">
+                <div className="flex justify-start">{card.icon}</div>
                 <div>
-                  <h2 className="text-xl font-semibold text-white">
+                  <h2 className="text-2xl font-semibold text-white">
                     {card.title}
                   </h2>
                   <a
                     href={card.link}
-                    className="mt-3 inline-block text-sm bg-white text-black px-4 py-1 rounded font-medium"
+                    className="mt-4 inline-block text-base bg-white text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-200 transition"
                   >
                     View
                   </a>
@@ -155,7 +140,9 @@ export default function AdminPage() {
         </div>
 
         {/* Routed Page Content */}
-        <Outlet />
+        <div className="mt-10">
+          <Outlet />
+        </div>
       </main>
     </div>
   );

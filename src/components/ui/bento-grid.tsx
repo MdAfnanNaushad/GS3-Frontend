@@ -40,6 +40,7 @@ export const BentoGridItem = ({
   imageUrl: string;
   liveLink: string;
   caseStudyLink: string;
+
 }) => {
   const ref = useRef(null);
 

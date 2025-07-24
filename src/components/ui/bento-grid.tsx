@@ -67,11 +67,12 @@ export const BentoGridItem = ({
     <div
       ref={ref}
       className={cn(
-        "group/bento shadow-input w-full row-span-1 flex flex-col justify-between space-y-4 rounded-xl border border-neutral-200 bg-white p-2 transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none",
+         "group/bento shadow-input w-full flex flex-col justify-between rounded-xl border border-neutral-200 bg-white object-cover transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none overflow-hidden p-2",
         className
       )}
     >
-      <DirectionAwareHover imageUrl={imageUrl} className="w-full">
+      <DirectionAwareHover imageUrl={imageUrl} className="w-full rounded-t-md ">
+        
         <div className="w-full h-full flex flex-col justify-between py-1 gap-2">
           <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
             <Aperture /> {title}

@@ -102,7 +102,7 @@ const ProjectsPage = () => {
 
   return (
     <div className="w-full min-h-screen px-6 md:px-20 py-16 bg-transparent text-white">
-      <h1 className="text-3xl font-semibold lg:text-4xl mt-12 tracking-widest font-orbitron text-start mb-6 text-border-white">
+      <h1 className="text-3xl font-semibold lg:text-4xl  tracking-widest font-orbitron text-start mb-6 text-border-white">
         Manage Projects
       </h1>
 

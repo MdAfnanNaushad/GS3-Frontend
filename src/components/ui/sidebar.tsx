@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -22,10 +21,17 @@ const Sidebar = () => {
     location.pathname === path ? "bg-muted font-semibold" : "";
 
   return (
-    <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block">
-      <div className="space-y-6">
+    <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block ">
+      <div className="space-y-6 sticky">
         <div>
-          <h2 className="text-lg font-semibold mb-2 px-2">Admin Panel</h2>
+          <h2 className="text-2xl font-semibold mb-2 px-2 flex items-center gap-2">
+            <img
+              className="h-8 w-8 object-contain"
+              src="/logo/GS3_logo.png"
+              alt="GS3 Logo"
+            />
+            GS3 Solutions
+          </h2>
           <div className="space-y-1">
             <Link
               to="/admin"

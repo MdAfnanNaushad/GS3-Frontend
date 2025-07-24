@@ -96,8 +96,8 @@ const CaseStudyPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen px-6 md:px-20 py-16 bg-transparent text-white">
-      <h1 className="text-3xl font-semibold lg:text-4xl tracking-widest font-orbitron text-start mb-6 text-border-white mt-12">
+    <div className="w-full min-h-screen  md:px-20 py-12 bg-transparent text-white">
+      <h1 className="text-3xl font-semibold lg:text-4xl tracking-widest font-orbitron text-start mb-6 text-border-white ">
         Manage Case Studies
       </h1>
 
@@ -168,11 +168,11 @@ const CaseStudyPage = () => {
 
       {/* Existing Projects */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold font-orbitron mb-4 text-start">
+        <h2 className="text-3xl font-semibold font-orbitron mb-4 text-start text-border-white tracking-widest">
           Existing Case Studies
         </h2>
 
-        <BentoGrid className="max-w-7xl px-4.5">
+        <BentoGrid className="max-w-7xl px-4.5 gap-4 ">
           {caseStudies.map((cs) => (
             <BentoGridItem
               key={cs.id}
@@ -181,7 +181,7 @@ const CaseStudyPage = () => {
                   <h3 className="text-lg font-semibold text-white">
                     {cs.title}
                   </h3>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 overflow-hidden">
                     <button
                       onClick={() => handleEdit(cs)}
                       className="px-3 py-1 text-sm font-sans bg-yellow-500 text-black rounded hover:bg-yellow-600 transition duration-200"

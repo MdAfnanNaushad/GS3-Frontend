@@ -53,7 +53,6 @@ const cards = [
   },
 ];
 
-
 const DashboardCards = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
@@ -64,7 +63,7 @@ const DashboardCards = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-zinc-100">{card.title}</p>
+              <p className="text-xl font-bold text-zinc-100">{card.title}</p>
               <h3 className="text-2xl font-bold mt-1">{card.value}</h3>
             </div>
             <card.icon size={32} className="opacity-90" />

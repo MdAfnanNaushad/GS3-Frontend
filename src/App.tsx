@@ -24,7 +24,13 @@ import ProjectsPage from "./pages/Admin/ProjectsPage";
 import AboutPage from "./pages/Admin/AboutPage";
 import CaseStudyPage from "./pages/Admin/CaseStudyPage";
 import ContactPage from "./pages/Admin/ContactPage";
+import AdminLogin from "./pages/AdminLogin";
+import EmployeeLogin from "./pages/EmployeeLogin";
+import AdminLayout from "./layout/components/AdminPart/AdminLayout";
+import ServicesPage from "./pages/Admin/ServicePage";
+import EmployeeList from "./layout/components/AdminPart/EmployeeList";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
+
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -41,62 +47,123 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <Layout>
-        <TransitionProvider>
-          <Routes>
-            <Route
-              index
-              element={
+      <TransitionProvider>
+        <Routes>
+          {/* Public pages wrapped in Layout */}
+          <Route
+            index
+            element={
+              <Layout>
                 <TransitionComponent>
                   <Home />
                 </TransitionComponent>
-              }
-            />
-            <Route
-              path="/about"
-              element={
+              </Layout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <Layout>
                 <TransitionComponent>
                   <About />
                 </TransitionComponent>
-              }
-            />
-            <Route
-              path="/contact"
-              element={
+              </Layout>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Layout>
                 <TransitionComponent>
                   <Contact />
                 </TransitionComponent>
-              }
-            />
-
-            <Route
-              path="/services"
-              element={
+              </Layout>
+            }
+          />
+          <Route
+            path="/services"
+            element={
+              <Layout>
                 <TransitionComponent>
                   <Service />
                 </TransitionComponent>
-              }
-            />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project1"
+            element={
+              <Layout>
+                <Project1 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project2"
+            element={
+              <Layout>
+                <Project2 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project3"
+            element={
+              <Layout>
+                <Project3 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project4"
+            element={
+              <Layout>
+                <Project4 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project5"
+            element={
+              <Layout>
+                <Project5 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/case-studies/project6"
+            element={
+              <Layout>
+                <Project6 />
+              </Layout>
+            }
+          />
+          <Route
+            path="/all-projects"
+            element={
+              <Layout>
+                <AllProjects />
+              </Layout>
+            }
+          />
 
-            {/* Add more routes here as needed */}
-            <Route path="/case-studies/project1" element={<Project1 />} />
-            <Route path="/case-studies/project2" element={<Project2 />} />
-            <Route path="/case-studies/project3" element={<Project3 />} />
-            <Route path="/case-studies/project4" element={<Project4 />} />
-            <Route path="/case-studies/project5" element={<Project5 />} />
-            <Route path="/case-studies/project6" element={<Project6 />} />
+          {/* Admin and login pages NOT wrapped in Layout */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminPage />} />
+            <Route path="employee" element={<EmployeePage />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="case-studies" element={<CaseStudyPage />} />
+            <Route path="contacts" element={<ContactPage />} />
+            <Route path="/admin/services" element={<ServicesPage />} />
+            <Route path="/admin/employees" element={<EmployeeList />} />
+          </Route>
 
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="admin/employee" element={<EmployeePage />} />
-            <Route path="/admin/projects" element={<ProjectsPage />} />
-            <Route path="/admin/about" element={<AboutPage />} />
-            <Route path="/admin/case-studies" element={<CaseStudyPage />} />
-            <Route path="/admin/contacts" element={<ContactPage />} />
-            <Route path="/all-projects" element={<AllProjects />} />
-
-          </Routes>
-        </TransitionProvider>
-      </Layout>
+          <Route path="/admin/login" element={<AdminLogin/>}/>
+          <Route path="/employee/login" element={<EmployeeLogin/>}/>
+          
+        </Routes>
+      </TransitionProvider>
     </BrowserRouter>
   );
 }

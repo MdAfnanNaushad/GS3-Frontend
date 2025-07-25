@@ -38,8 +38,8 @@ const ContactsPage = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6 flex items-center gap-2 font-orbitron text-border-white tracking-widest">
-        <MessageCircle className="text-blue-500" />
+      <h2 className="text-4xl font-bold mb-6 flex items-center gap-2 font-orbitron  text-border-white tracking-widest">
+        <MessageCircle className="text-white h-8 w-8" />
         Contacts Received
       </h2>
 

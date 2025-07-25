@@ -96,8 +96,8 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="w-full px-6 md:px-20 py-16 bg-transparent text-white min-h-screen">
-      <h1 className="text-5xl font-semibold tracking-widest font-orbitron text-border-white mb-6 ">
+    <div className="w-full px-6 md:px-20 py-8 bg-transparent text-white min-h-screen">
+      <h1 className="text-4xl font-semibold tracking-widest font-orbitron text-border-white mb-6 ">
         Manage Timeline
       </h1>
 

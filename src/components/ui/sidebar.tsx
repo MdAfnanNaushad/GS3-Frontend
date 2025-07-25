@@ -112,13 +112,13 @@ const Sidebar = () => {
         <div>
           <h2 className="text-sm text-muted-foreground px-2 mt-4">Account</h2>
           <Link
-            to="/admin/profile"
+            to="/admin/active-employees"
             className={`flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted ${isActive(
-              "/admin/profile"
+              "/admin/active-employees"
             )}`}
           >
             <UserCog size={16} />
-            Logged In
+            Status
           </Link>
         </div>
       </div>

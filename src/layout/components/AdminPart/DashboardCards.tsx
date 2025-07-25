@@ -35,7 +35,7 @@ const cards = [
     icon: Wrench,
     value: 9,
     bg: "bg-gradient-to-r from-yellow-500 to-yellow-700",
-    link: "/admin/services",
+    link: "/admin/services-offered",
   },
   {
     title: "Projects Ongoing",

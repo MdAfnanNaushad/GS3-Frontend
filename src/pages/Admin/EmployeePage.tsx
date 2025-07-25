@@ -51,13 +51,13 @@ const EmployeePage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen px-6 md:px-20 py-16 bg-transparent text-white">
+    <div className="w-full min-h-screen px-6 md:px-20 py-8 bg-transparent text-white">
       <h1 className="text-3xl font-semibold lg:text-4xl tracking-widest font-orbitron text-start  mb-6 text-border-white">
         Manage Employees
       </h1>
 
       {/* Form */}
-      <div className="flex justify-center">
+      <div className="flex justify-center max-w-7xl">
         <form className="w-full max-w-lg space-y-8">
           {/* Name */}
           <div>

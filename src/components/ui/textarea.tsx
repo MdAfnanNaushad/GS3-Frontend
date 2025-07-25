@@ -44,12 +44,12 @@ const Textarea = React.forwardRef<
         ref={ref}
         {...props}
         className={cn(
-          `shadow-input flex w-full rounded-md border-none bg-transparent px-3 py-2 text-sm 
+          `shadow-input flex w-full rounded-md  bg-transparent px-3 py-2 text-sm 
           text-black transition duration-400 group-hover/input:shadow-none 
           placeholder:text-neutral-400 focus-visible:ring-[2px] focus-visible:ring-neutral-400 
           focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 
           dark:bg-black dark:text-white dark:shadow-[0px_0px_1px_1px_#404040] 
-          dark:focus-visible:ring-neutral-600 border-gray-300`,
+          dark:focus-visible:ring-neutral-600 border-gray-700 border-2 border-solid`,
           className
         )}
       />

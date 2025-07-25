@@ -21,7 +21,7 @@ const AdminLogin = () => {
                   alt="GS3 Logo"
                   className="h-10 w-10 object-contain"
                 />
-                <span className="text-3xl font-semibold font-orbitron text-border-white tracking-widest">Admin Login</span>
+                <span className="text-3xl font-semibold font-orbitron text-border-white tracking-widest">Employee Login</span>
               </div>
             }
           />

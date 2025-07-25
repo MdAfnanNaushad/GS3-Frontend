@@ -62,7 +62,7 @@ const ServicesPage = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto text-white">
-      <h1 className="text-5xl tracking-widest font-semibold mt-6 mb-6 font-orbitron text-border-white">Add New Service</h1>
+      <h1 className="text-4xl tracking-widest font-semibold mt-6 mb-6 font-orbitron text-border-white">Add New Service</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}

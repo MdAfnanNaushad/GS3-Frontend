@@ -29,6 +29,9 @@ import EmployeeLogin from "./pages/EmployeeLogin";
 import AdminLayout from "./layout/components/AdminPart/AdminLayout";
 import ServicesPage from "./pages/Admin/ServicePage";
 import EmployeeList from "./layout/components/AdminPart/EmployeeList";
+import EmployeeStatus from "./pages/Admin/EmployeeStatus";
+import ServicesOffered from "./pages/Admin/ServicesOffered";
+import ClientServed from "./pages/Admin/ClientServed";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
 
 function App() {
@@ -157,11 +160,14 @@ function App() {
             <Route path="contacts" element={<ContactPage />} />
             <Route path="/admin/services" element={<ServicesPage />} />
             <Route path="/admin/employees" element={<EmployeeList />} />
+            <Route path="active-employees" element={<EmployeeStatus />} />
+            <Route path="services-offered" element={<ServicesOffered />} />
+            <Route path="clients" element={<ClientServed />} />
+
           </Route>
 
-          <Route path="/admin/login" element={<AdminLogin/>}/>
-          <Route path="/employee/login" element={<EmployeeLogin/>}/>
-          
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/employee/login" element={<EmployeeLogin />} />
         </Routes>
       </TransitionProvider>
     </BrowserRouter>

@@ -24,7 +24,7 @@ export default function AllProjects() {
 
   return (
     <main className="min-h-screen w-full px-6 py-12">
-      <h1 className="text-4xl font-orbitron mb-8 text-white">All Projects</h1>
+      <h1 className="text-4xl font-orbitron mb-8 text-white font-orbitron text-border-white tracking-widest mt-12 mx-24">All Projects</h1>
       <BentoGrid className="max-w-7xl mx-auto">
         {projects.map((project) => (
           <BentoGridItem

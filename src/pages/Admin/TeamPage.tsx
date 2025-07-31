@@ -46,7 +46,7 @@ export default function TeamPage() {
 
   useEffect(() => {
     fetchTeam();
-  }, []);
+  }, );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

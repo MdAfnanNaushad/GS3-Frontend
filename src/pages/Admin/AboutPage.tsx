@@ -63,7 +63,7 @@ export default function AboutPage() {
   const onSubmitTimeline = async (data: { timeline: TimelineItem[] }) => {
     try {
 
-      const newEntries = data.timeline.filter((item, index) => !timelineFields[index]._id);
+      const newEntries = data.timeline.filter((_, index) => !timelineFields[index]._id);
 
       if (newEntries.length === 0) {
         alert("No new timeline entries to save.");

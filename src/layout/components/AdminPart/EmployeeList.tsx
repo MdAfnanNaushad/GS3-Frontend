@@ -1,80 +1,107 @@
-
+"use client";
 
 import { useEffect, useState } from "react";
+import axios, { isAxiosError } from "axios";
 
+// This interface should match the data structure from the API
 interface Employee {
-  id: string;
-  name: string;
-  role: string;
+  _id: string;
+  username: string;
   email: string;
-  imageUrl: string;
+  image?: string; // The backend provides the full URL
+  role: string;
 }
 
-const dummyEmployees: Employee[] = [
-  {
-   id:"1",
-    name: "Md Afnan Naushad",
-    email: "afnan@example.com",
-    role: "Developer",
-    imageUrl: "/team/default.png",
-  },
-  {
-    id:"2",
-    name: "Sudip Tinga",
-    email: "sudip@example.com",
-    role: "Full Stack Developer",
-    imageUrl: "/team/default.png",
-  },
-];
-
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState<Employee[]>(dummyEmployees);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
+  const api = axios.create({
+    baseURL: "http://localhost:8000/api/v1",
+    withCredentials: true,
+  });
 
-  const handleDelete = (id: string) => {
-    setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+  const fetchEmployees = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await api.get("/employees/all");
+      if (res.data?.data) {
+        console.log("Fetched employees for list page:", res.data.data); // For debugging
+        setEmployees(res.data.data);
+      }
+    } catch (err) {
+      console.error("Error fetching employees:", err);
+      if (isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to load employees.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // This useEffect hook runs once when the component is mounted,
+  // ensuring you always get the latest list when you navigate to this page.
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this employee?")) return;
+    try {
+      await api.delete(`/employees/delete/${id}`);
+      // After deleting, filter the employee out of the local state for an instant update.
+      setEmployees(prevEmployees => prevEmployees.filter(emp => emp._id !== id));
+    } catch (err) {
+      console.error("Error deleting employee:", err);
+      setError("Failed to delete employee.");
+    }
   };
 
   const handleEdit = (id: string) => {
-    alert(`Edit employee with id: ${id}`);
-    // You can populate the form for editing here
+    // In a real app, you would navigate to an edit page:
+    // navigate(`/admin/employees/edit/${id}`);
+    alert("Handle edit logic here for employee ID: " + id);
   };
-  useEffect(() => {
-    // Later: fetch from backend
-    setEmployees(dummyEmployees);
-  }, []);
 
   return (
-    <div className="p-6 text-white  min-h-screen">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl tracking-widest font-semibold font-orbitron text-border-white mb-6">Team Members</h1>
-      </div>
+    <div className="p-6 text-white min-h-screen">
+      <h1 className="text-3xl tracking-widest font-semibold font-orbitron text-border-white mb-6">
+        Team Members
+      </h1>
 
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+      
+      {loading ? (
+        <p>Loading team members...</p>
+      ) : (
         <div className="grid md:grid-cols-2 gap-6">
           {employees.map((emp) => (
             <div
-              key={emp.id}
+              key={emp._id}
               className="border border-gray-700 rounded-lg p-4 flex flex-col md:flex-row items-center gap-4 bg-black/20"
             >
               <img
-                src={emp.imageUrl}
-                alt={emp.name}
+                // Use the full URL from the backend directly, with a fallback
+                src={emp.image || "/employee_images/default.png"}
+                alt={emp.username}
                 className="w-24 h-24 rounded-full object-cover border border-gray-600"
               />
               <div className="flex-1 space-y-1 text-center md:text-left">
-                <h3 className="text-lg font-semibold">{emp.name}</h3>
+                <h3 className="text-lg font-semibold">{emp.username}</h3>
                 <p className="text-gray-300 text-sm">{emp.email}</p>
                 <p className="text-gray-400 text-sm italic">{emp.role}</p>
               </div>
               <div className="flex gap-3 mt-4 md:mt-0">
                 <button
-                  onClick={() => handleEdit(emp.id)}
+                  onClick={() => handleEdit(emp._id)}
                   className="text-sm px-4 py-2 bg-white text-black rounded-md hover:bg-gray-300"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(emp.id)}
+                  onClick={() => handleDelete(emp._id)}
                   className="text-sm px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                 >
                   Delete
@@ -83,8 +110,8 @@ const EmployeeList = () => {
             </div>
           ))}
         </div>
-      </div>
-
+      )}
+    </div>
   );
 };
 

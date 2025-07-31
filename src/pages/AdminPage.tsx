@@ -4,7 +4,7 @@ import ProjectList from "@/layout/components/AdminPart/ProjectList";
 const AdminPage = () => {
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-4">Welcome back, Admin!</h1>
+      <h1 className="text-3xl font-semibold mb-4 font-orbitron tracking-widest text-border-white">Hello, Admin!</h1>
       <DashboardCards />
       <ProjectList />
     </>

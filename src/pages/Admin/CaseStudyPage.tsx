@@ -1,212 +1,391 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/form";
+import { useEffect, useState } from "react";
+import axios, { isAxiosError } from "axios";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid"; // Reuse your HomePage grid
+import { Textarea } from "@/components/ui/textarea";
 
-interface CaseStudy {
-  id: string;
+// Define interfaces for our data
+interface Project {
+  _id: string;
   title: string;
-  liveLink: string;
-  caseStudyLink: string;
-  imageUrl: string;
+}
+interface CaseStudy {
+  _id: string;
+  title: string;
+  workId?: { _id: string; title: string };
+  heroImage?: string;
+}
+interface CaseStudyDetail {
+  _id: string;
+  title: string;
+  description: string;
+  image?: string;
 }
 
-const dummyData: CaseStudy[] = [
-  {
-    id: "1",
-    title: "The Dawn of Innovation",
-    liveLink: "https://live-demo.com",
-    caseStudyLink: "https://case-study.com",
-    imageUrl:
-      "https://media.istockphoto.com/id/599965448/photo/silhouette-of-wind-turbine-morning-view-from-tamilnadu-india.webp?a=1&b=1&s=612x612&w=0&k=20&c=Aiscw7XoHUhkcZAPpXUDIXAfjhh9vw6r_GL0cHtHVxI=", ///case_study_images/sample1.jpg
-  },
-  {
-    id: "2",
-    title: "The Joy of creation",
-    liveLink: "https://live-app.com",
-    caseStudyLink: "https://case-study.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1443916568596-df5a58c445e9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGpveXxlbnwwfHwwfHx8MA%3D%3D", ///case_study_images/sample2.jpg
-  },
-];
-
 const CaseStudyPage = () => {
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>(dummyData);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+  const [selectedCaseStudyId, setSelectedCaseStudyId] = useState<string | null>(
+    null
+  );
+  const [details, setDetails] = useState<CaseStudyDetail[]>([]);
+  const [error, setError] = useState("");
 
-  const [formData, setFormData] = useState({
-    id: "",
+  const [form, setForm] = useState({
+    workId: "",
     title: "",
-    liveLink: "",
-    caseStudyLink: "",
+    tagline: "",
+    description: "",
+    team: "",
+    result: "",
+  });
+  const [heroImage, setHeroImage] = useState<File | null>(null);
+
+  const [detailForm, setDetailForm] = useState({ title: "", description: "" });
+  const [detailImage, setDetailImage] = useState<File | null>(null);
+
+  const api = axios.create({
+    baseURL: "http://localhost:8000/api/v1",
+    withCredentials: true,
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
+  const fetchAllData = async () => {
+    try {
+      setError("");
+      const projectsRes = await api.get("/work");
+      setProjects(projectsRes.data.data);
+
+      const caseStudiesRes = await api.get("/case-studies");
+      setCaseStudies(caseStudiesRes.data.data);
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.error("Failed to fetch initial data:", err);
+        setError(
+          err.response?.data?.message ||
+            "Failed to load data. You may need to log in again."
+        );
+      } else {
+        setError("An unexpected error occurred.");
+      }
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    fetchAllData();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newCaseStudy: CaseStudy = {
-      id: formData.id || crypto.randomUUID(),
-      title: formData.title,
-      liveLink: formData.liveLink,
-      caseStudyLink: formData.caseStudyLink,
-      imageUrl: imagePreview || "/case_study_images/default.jpg",
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (selectedCaseStudyId) {
+        try {
+          const res = await api.get(
+            `/case-studies/details/${selectedCaseStudyId}`
+          );
+          setDetails(res.data.data);
+        } catch (err) {
+          if (isAxiosError(err)) {
+            console.error("Failed to fetch details:", err);
+            setError("Could not load details for the selected case study.");
+          }
+        }
+      }
     };
+    fetchDetails();
+  }, [selectedCaseStudyId]);
 
-    if (formData.id) {
-      // Edit mode
-      setCaseStudies((prev) =>
-        prev.map((cs) => (cs.id === formData.id ? newCaseStudy : cs))
-      );
-    } else {
-      // Create mode
-      setCaseStudies((prev) => [newCaseStudy, ...prev]);
+  const handleCreateCaseStudy = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    const formData = new FormData();
+    formData.append("workId", form.workId);
+    formData.append("title", form.title);
+    formData.append("tagline", form.tagline);
+    formData.append("description", form.description);
+    formData.append(
+      "team",
+      JSON.stringify(form.team.split(",").map((s) => s.trim()))
+    );
+    formData.append("result", form.result);
+    if (heroImage) formData.append("heroImage", heroImage);
+
+    try {
+      const res = await api.post("/case-studies/create", formData);
+      // Optimistic UI update
+      setCaseStudies(prev => [res.data.data, ...prev]);
+      alert("Case study created successfully!");
+      // Reset form
+      setForm({ workId: "", title: "", tagline: "", description: "", team: "", result: "" });
+      setHeroImage(null);
+      (document.querySelector('input[type="file"]') as HTMLInputElement).value = "";
+
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.error("Failed to create case study:", err);
+        setError(err.response?.data?.message || "Could not create case study.");
+      }
     }
-
-    // Reset
-    setFormData({ id: "", title: "", liveLink: "", caseStudyLink: "" });
-    setImagePreview(null);
   };
 
-  const handleEdit = (cs: CaseStudy) => {
-    setFormData({
-      id: cs.id,
-      title: cs.title,
-      liveLink: cs.liveLink,
-      caseStudyLink: cs.caseStudyLink,
-    });
-    setImagePreview(cs.imageUrl);
+  const handleAddDetail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCaseStudyId) return;
+
+    const formData = new FormData();
+    formData.append("caseStudyId", selectedCaseStudyId);
+    formData.append("title", detailForm.title);
+    formData.append("description", detailForm.description);
+    if (detailImage) formData.append("image", detailImage);
+
+    try {
+      const res = await api.post("/case-studies/detail/create", formData);
+      setDetails((prevDetails) => [...prevDetails, res.data.data]);
+      setDetailForm({ title: "", description: "" });
+      (
+        document.getElementById("detail-image-input") as HTMLInputElement
+      ).value = "";
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.error("Failed to add detail:", err);
+        setError(
+          err.response?.data?.message || "Could not add detail section."
+        );
+      }
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setCaseStudies((prev) => prev.filter((cs) => cs.id !== id));
+  const handleDeleteDetail = async (detailId: string) => {
+    if (!confirm("Are you sure you want to delete this detail section?"))
+      return;
+
+    try {
+      await api.delete(`/case-studies/details/${detailId}`);
+      setDetails((prevDetails) =>
+        prevDetails.filter((d) => d._id !== detailId)
+      );
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.error("Failed to delete detail:", err);
+        setError(
+          err.response?.data?.message || "Could not delete detail section."
+        );
+      }
+    }
+  };
+
+  // --- NEW: Handler to delete an entire case study ---
+  const handleDeleteCaseStudy = async (caseStudyId: string) => {
+    if (!confirm("Are you sure you want to permanently delete this entire case study?")) return;
+    
+    try {
+      await api.delete(`/case-studies/${caseStudyId}`);
+      // Optimistic UI update: remove the case study from the list
+      setCaseStudies(prev => prev.filter(cs => cs._id !== caseStudyId));
+      alert("Case study deleted successfully.");
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.error("Failed to delete case study:", err);
+        setError(err.response?.data?.message || "Could not delete case study.");
+      }
+    }
   };
 
   return (
-    <div className="w-full min-h-screen  md:px-20 py-12 bg-transparent text-white">
-      <h1 className="text-3xl font-semibold lg:text-4xl tracking-widest font-orbitron text-start mb-6 text-border-white ">
+    <div className="p-6 text-white">
+      <h1 className="text-4xl font-orbitron tracking-widest text-border-white font-bold mb-6">
         Manage Case Studies
       </h1>
 
-      {/* Form */}
-      <div className="flex justify-center mb-20">
-        <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-8">
+      {error && (
+        <p className="text-red-500 bg-red-950/30 p-3 rounded-md mb-6">
+          {error}
+        </p>
+      )}
+
+      <div className=" p-4 rounded-lg mb-8">
+        <h2 className="text-xl font-semibold mb-4">Create New Case Study</h2>
+        <form onSubmit={handleCreateCaseStudy} className="space-y-4">
+          <select
+            value={form.workId}
+            onChange={(e) => setForm({ ...form, workId: e.target.value })}
+            required
+            className="w-full p-2 rounded bg-gray-900 border-gray-600"
+          >
+            <option value="">Select a Project to Link</option>
+            {projects.map((p) => (
+              <option key={p._id} value={p._id}>
+                {p.title}
+              </option>
+            ))}
+          </select>
+          <Input
+            placeholder="Case Study Title"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+            className="bg-gray-700 border-gray-600"
+          />
+          <Input
+            placeholder="Tagline"
+            value={form.tagline}
+            onChange={(e) => setForm({ ...form, tagline: e.target.value })}
+            className="bg-gray-700 border-gray-600"
+          />
+          <Textarea
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            className="bg-gray-700 border-gray-600"
+          />
+          <Input
+            placeholder="Team Roles (comma-separated)"
+            value={form.team}
+            onChange={(e) => setForm({ ...form, team: e.target.value })}
+            className="bg-gray-700 border-gray-600"
+          />
+          <Textarea
+            placeholder="Result"
+            value={form.result}
+            onChange={(e) => setForm({ ...form, result: e.target.value })}
+            className="bg-gray-700 border-gray-600"
+          />
           <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Title
-            </Label>
+            <Label>Hero Image</Label>
             <Input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              placeholder="Enter Project Title"
+              type="file"
+              onChange={(e) => setHeroImage(e.target.files?.[0] || null)}
             />
           </div>
-
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Live Link
-            </Label>
-            <Input
-              type="url"
-              name="liveLink"
-              value={formData.liveLink}
-              onChange={handleInputChange}
-              placeholder="https://your-live-link.com"
-            />
-          </div>
-
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Case Study Link
-            </Label>
-            <Input
-              type="url"
-              name="caseStudyLink"
-              value={formData.caseStudyLink}
-              onChange={handleInputChange}
-              placeholder="https://case-study-link.com"
-            />
-          </div>
-
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Project Image
-            </Label>
-            <Input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="mt-4 w-full h-60 object-cover rounded-md border border-gray-600"
-              />
-            )}
-          </div>
-
           <button
             type="submit"
-            className="bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-700 hover:text-gray-200 transition duration-300 w-full"
+            className="bg-gray-700 hover:bg-gray-200 hover:text-gray-900 duration-500 px-4 py-2 rounded"
           >
-            {formData.id ? "Update Case Study" : "Save Case Study"}
+            Create Case Study
           </button>
         </form>
       </div>
 
-      {/* Existing Projects */}
-      <div className="space-y-6">
-        <h2 className="text-3xl font-semibold font-orbitron mb-4 text-start text-border-white tracking-widest">
+      <div className="border-gray-500 border-2 p-4 rounded-lg">
+        <h2 className="text-3xl font-orbitron tracking-widest text-border-white font-semibold mb-4">
           Existing Case Studies
         </h2>
+        {caseStudies.map((cs) => (
+          <div
+            key={cs._id}
+            className="border-b border-gray-700 py-2 flex justify-between items-center"
+          >
+            <p>
+              <strong>{cs.title}</strong>
+              (Linked to:{" "}
+              {cs.workId ? (
+                cs.workId.title
+              ) : (
+                <span className="text-yellow-500">Unlinked Project</span>
+              )}
+              )
+            </p>
+            {/* --- THIS IS THE FIX --- */}
+            <div className="flex items-center gap-4">
+              {/* Conditionally render the Remove button only for unlinked projects */}
+              {!cs.workId && (
+                <button
+                  onClick={() => handleDeleteCaseStudy(cs._id)}
+                  className="text-sm text-red-500 hover:text-red-400"
+                >
+                  Remove
+                </button>
+              )}
+              <button
+                onClick={() =>
+                  setSelectedCaseStudyId(
+                    cs._id === selectedCaseStudyId ? null : cs._id
+                  )
+                }
+                className="text-sm text-cyan-400"
+              >
+                {selectedCaseStudyId === cs._id
+                  ? "Close Details"
+                  : "Manage Details"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        <BentoGrid className="max-w-7xl px-4.5 gap-4 ">
-          {caseStudies.map((cs) => (
-            <BentoGridItem
-              key={cs.id}
-              title={
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    {cs.title}
-                  </h3>
-                  <div className="flex gap-4 overflow-hidden">
+      {selectedCaseStudyId && (
+        <div className="mt-8 p-6 rounded-lg border border-gray-500">
+          <h3 className="text-3xl font-orbitron text-border-white tracking-widest font-semibold mb-4 text-cyan-300">
+            Managing Details for:{" "}
+            {caseStudies.find((cs) => cs._id === selectedCaseStudyId)?.title}
+          </h3>
+
+          <div className="border-gray-500 border-2 p-4 rounded-lg mb-6">
+            <h4 className="text-lg font-semibold mb-3">
+              Add New Detail Section
+            </h4>
+            <form onSubmit={handleAddDetail} className="space-y-4">
+              <Input
+                placeholder="Detail Title"
+                value={detailForm.title}
+                onChange={(e) =>
+                  setDetailForm({ ...detailForm, title: e.target.value })
+                }
+                required
+                className="bg-gray-700 border-gray-600"
+              />
+              <Textarea
+                placeholder="Detail Description"
+                value={detailForm.description}
+                onChange={(e) =>
+                  setDetailForm({ ...detailForm, description: e.target.value })
+                }
+                required
+                className="bg-gray-700 border-gray-600"
+              />
+              <div>
+                <Label>Detail Image</Label>
+                <Input
+                  id="detail-image-input"
+                  type="file"
+                  onChange={(e) => setDetailImage(e.target.files?.[0] || null)}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+              >
+                Add Detail
+              </button>
+            </form>
+          </div>
+
+          <div>
+            <h4 className="text-lg font-semibold mb-3">Existing Details</h4>
+            <div className="space-y-3">
+              {details.length > 0 ? (
+                details.map((detail) => (
+                  <div
+                    key={detail._id}
+                    className="bg-gray-800 p-3 rounded flex justify-between items-center"
+                  >
+                    <p>{detail.title}</p>
                     <button
-                      onClick={() => handleEdit(cs)}
-                      className="px-3 py-1 text-sm font-sans bg-yellow-500 text-black rounded hover:bg-yellow-600 transition duration-200"
-                      type="button"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(cs.id)}
-                      className="px-3 py-1 text-sm font-sans bg-red-500 text-white rounded hover:bg-red-600 transition duration-200"
-                      type="button"
+                      onClick={() => handleDeleteDetail(detail._id)}
+                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 text-sm rounded"
                     >
                       Delete
                     </button>
                   </div>
-                </div>
-              }
-              imageUrl={cs.imageUrl}
-              liveLink={cs.liveLink}
-              caseStudyLink={cs.caseStudyLink}
-              className="bg-black/30 border border-gray-700  rounded-md"
-            />
-          ))}
-        </BentoGrid>
-      </div>
+                ))
+              ) : (
+                <p className="text-gray-400">No details added yet.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

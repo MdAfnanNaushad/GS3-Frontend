@@ -1,7 +1,7 @@
 import ShinyText from "@/components/reactbits/ShinyText";
 import Threads from "@/components/reactbits/Threads";
 import { Button } from "@/components/ui/button";
-
+import { Link } from "react-router-dom";
 function Hero() {
   return (
     <>
@@ -21,13 +21,15 @@ function Hero() {
               products that stand out.
             </p>
             <div className="flex justify-center gap-4 items-center mt-4">
-              <Button
+              <Link to="/contact">
+              <Button 
                 variant="default"
                 className="font-orbitron border-[1px] border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-md cursor-pointer backdrop-blur-[1px] duration-700 hover:text-neutral-800"
               >
                 {" "}
                 Contact Us
               </Button>
+              </Link>
             </div>
           </div>
         </div>

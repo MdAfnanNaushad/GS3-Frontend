@@ -4,8 +4,16 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/form";
 import { useState, useEffect } from "react";
+import  { isAxiosError } from "axios"; // Import isAxiosError for better error handling
+import {
+  fetchAbout,
+  updateStats,
+  addTimeline,
+  deleteTimeline,
+} from "@/API/aboutApi";
 
 type TimelineItem = {
+  _id?: string;
   year: string;
   title: string;
   description: string;
@@ -25,16 +33,13 @@ const defaultStats = [
 ];
 
 export default function AboutPage() {
-  // Timeline form
   const {
     register: registerTimeline,
     control: controlTimeline,
     handleSubmit: handleSubmitTimeline,
     reset: resetTimeline,
   } = useForm<{ timeline: TimelineItem[] }>({
-    defaultValues: {
-      timeline: [],
-    },
+    defaultValues: { timeline: [] },
   });
 
   const {
@@ -54,22 +59,80 @@ export default function AboutPage() {
     setPreviewUrls((prev) => ({ ...prev, [index]: urls }));
   };
 
-  const onSubmitTimeline = (data: { timeline: TimelineItem[] }) => {
-    // Save timeline to localStorage or backend as needed
-    localStorage.setItem("gs3_timeline", JSON.stringify(data.timeline));
-    alert("Timeline saved!");
+
+  const onSubmitTimeline = async (data: { timeline: TimelineItem[] }) => {
+    try {
+
+      const newEntries = data.timeline.filter((item, index) => !timelineFields[index]._id);
+
+      if (newEntries.length === 0) {
+        alert("No new timeline entries to save.");
+        return;
+      }
+
+
+      for (const item of newEntries) {
+        const formData = new FormData();
+        formData.append("year", item.year);
+        formData.append("title", item.title);
+        formData.append("description", item.description);
+
+        if (item.images && item.images.length > 0) {
+          Array.from(item.images).forEach((img) => {
+            formData.append("images", img);
+          });
+        } else {
+
+          alert(`Please add at least one image for the timeline entry: "${item.title}"`);
+          return; 
+        }
+
+        await addTimeline(formData);
+      }
+
+
+      const { data: aboutData } = await fetchAbout();
+      resetTimeline({ timeline: aboutData?.data?.timeline || [] });
+      setPreviewUrls({}); 
+
+      alert("Timeline saved successfully!");
+    } catch (err) {
+      console.error("Error saving timeline:", err);
+      if (isAxiosError(err)) {
+        alert(err.response?.data?.message || "An error occurred while saving.");
+      } else {
+        alert("An unknown error occurred.");
+      }
+    }
   };
 
-  // Stats form
+  const handleDeleteTimeline = async (mongoId: string, index: number) => {
+    try {
+      if (mongoId) {
+        await deleteTimeline(mongoId);
+        removeTimeline(index); 
+        alert("Timeline entry deleted!");
+      } else {
+        removeTimeline(index);
+      }
+      setPreviewUrls((prev) => {
+        const updated = { ...prev };
+        delete updated[index];
+        return updated;
+      });
+    } catch (err) {
+      console.error("Failed to delete timeline:", err);
+      alert("Something went wrong while deleting timeline.");
+    }
+  };
+
   const {
     register: registerStats,
     control: controlStats,
     handleSubmit: handleSubmitStats,
     reset: resetStats,
   } = useForm<{ stats: StatItem[] }>({
-    defaultValues: {
-      stats: defaultStats,
-    },
+    defaultValues: { stats: defaultStats },
   });
 
   const {
@@ -81,22 +144,29 @@ export default function AboutPage() {
     name: "stats",
   });
 
-  // Load stats from localStorage on mount
   useEffect(() => {
-    const savedStats = localStorage.getItem("gs3_stats");
-    if (savedStats) resetStats({ stats: JSON.parse(savedStats) });
-
-    const savedTimeline = localStorage.getItem("gs3_timeline");
-    if (savedTimeline) resetTimeline({ timeline: JSON.parse(savedTimeline) });
+    async function loadAbout() {
+      try {
+        const { data } = await fetchAbout();
+        if (data.data) {
+            resetStats({ stats: data.data.stats || [] });
+            resetTimeline({ timeline: data.data.timeline || [] });
+        }
+      } catch (err) {
+        console.error("Failed to load About data", err);
+      }
+    }
+    loadAbout();
   }, [resetStats, resetTimeline]);
 
   const onSubmitStats = (data: { stats: StatItem[] }) => {
-    localStorage.setItem("gs3_stats", JSON.stringify(data.stats));
-    alert("Stats saved!");
+    updateStats(data.stats)
+      .then(() => alert("Stats updated Successfully"))
+      .catch((err) => console.error("Failed to update Stats", err));
   };
 
   return (
-    <div className="w-full px-6 md:px-20 py-8 bg-transparent text-white min-h-screen">
+    <div className="w-full  md:px-20 py-8 bg-transparent text-white min-h-screen">
       <h1 className="text-4xl font-semibold tracking-widest font-orbitron text-border-white mb-6 ">
         Manage Timeline
       </h1>
@@ -147,7 +217,7 @@ export default function AboutPage() {
 
             <div>
               <Label className="text-xl block text-gray-300 mb-1">
-                Upload Images (optional, max 2)
+                Upload Images (required for new entries)
               </Label>
               <Input
                 type="file"
@@ -171,7 +241,7 @@ export default function AboutPage() {
             <button
               type="button"
               className="text-red-500 border border-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md"
-              onClick={() => removeTimeline(index)}
+              onClick={() => handleDeleteTimeline(field._id ?? "", index)}
             >
               Delete Entry
             </button>

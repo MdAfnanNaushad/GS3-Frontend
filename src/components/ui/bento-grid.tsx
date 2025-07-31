@@ -33,14 +33,13 @@ export const BentoGridItem = ({
   title,
   imageUrl,
   liveLink,
-  caseStudyLink,
+  caseStudyId,
 }: {
   className?: string;
   title?: string | React.ReactNode;
-  imageUrl: string;
-  liveLink: string;
-  caseStudyLink: string;
-
+  imageUrl?: string;
+  liveLink?: string;
+  caseStudyId?: { _id: string } | null;
 }) => {
   const ref = useRef(null);
 
@@ -67,43 +66,48 @@ export const BentoGridItem = ({
     <div
       ref={ref}
       className={cn(
-         "group/bento shadow-input w-full flex flex-col justify-between rounded-xl border border-neutral-200 bg-white object-cover transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none overflow-hidden p-2",
+        "group/bento shadow-input w-full flex flex-col justify-between rounded-xl border border-neutral-200 bg-white transition duration-200 hover:shadow-xl dark:border-white/[0.2] dark:bg-black dark:shadow-none overflow-hidden px-3.5 py-2",
         className
       )}
     >
-      <DirectionAwareHover imageUrl={imageUrl} className="w-full rounded-t-md ">
-        
-        <div className="w-full h-full flex flex-col justify-between py-1 gap-2">
-          <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
-            <Aperture /> {title}
-          </div>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center w-full mt-4 gap-4 sm:gap-6">
-            <a
-              href={liveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                variant="default"
-                className="font-orbitron w-[100px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
-              >
-                <Globe className="mr-1" />
-                Live
-              </Button>
-            </a>
-            <Link to={caseStudyLink}>
-              <Button
-                variant="default"
-                className="font-orbitron w-[150px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
-              >
-                <SearchSlash className="mr-1" />
-                Case Study
-              </Button>
-            </Link>
+      {imageUrl && (
+        <DirectionAwareHover
+          imageUrl={imageUrl}
+          className="w-full rounded-t-md "
+        >
+          <div className="w-full h-full flex flex-col justify-between py-1 gap-2">
+            <div className="w-full text-white font-sm font-orbitron text-2xl flex gap-2 items-center">
+              <Aperture /> {title}
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-center items-center w-full mt-4 gap-4 sm:gap-6">
+              {liveLink && (
+                <a href={liveLink} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="default"
+                    className="font-orbitron w-[100px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
+                  >
+                    <Globe className="mr-1" />
+                    Live
+                  </Button>
+                </a>
+              )}
+              {caseStudyId && (
+                <Link to={`/case-study/${caseStudyId._id}`}>
+                  <Button
+                    variant="default"
+                    className="font-orbitron w-[150px] border border-gray-400/20 bg-neutral-400/20 text-neutral-200 hover:backdrop-blur-[2px] hover:text-gray-900 cursor-pointer backdrop-blur-[1px] duration-700"
+                  >
+                    <SearchSlash className="mr-1" />
+                    Case Study
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
-      </DirectionAwareHover>
+        </DirectionAwareHover>
+      )}
     </div>
   );
 };

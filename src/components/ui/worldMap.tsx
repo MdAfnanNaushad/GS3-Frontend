@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react"; // Import useMemo
 import { motion } from "framer-motion";
 import DottedMap from "dotted-map";
 
@@ -14,24 +14,25 @@ interface MapProps {
 
 export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const map = new DottedMap({ height: 120, grid: "diagonal" }); // Increased resolution
 
-  const svgMap = map.getSVG({
-    radius: 0.25,
-    color: "#1e90ff70", 
-    shape: "circle",
-    backgroundColor: "transparent", 
-  });
+  // --- THIS IS THE FIX ---
+  // useMemo caches the result of these expensive operations.
+  // The map and SVG will now only be generated once.
+  const svgMap = useMemo(() => {
+    const map = new DottedMap({ height: 120, grid: "diagonal" });
+    return map.getSVG({
+      radius: 0.25,
+      color: "#1e90ff70",
+      shape: "circle",
+      backgroundColor: "transparent",
+    });
+  }, []); // Empty dependency array means it runs only on the first render
 
   const projectPoint = (lat: number, lng: number) => {
-    // Manually adjust Kolkata origin projection to match svgMap rendering
     const viewBoxWidth = 900;
     const viewBoxHeight = 450;
-
-    // Tailor projection to align Kolkata correctly in the viewBox
-    const x = ((lng + 180) / 360) * viewBoxWidth; // -180 to 180 → 0 to 900
-    const y = ((90 - lat) / 180) * viewBoxHeight; // 90 to -90 → 0 to 450
-
+    const x = ((lng + 180) / 360) * viewBoxWidth;
+    const y = ((90 - lat) / 180) * viewBoxHeight;
     return { x, y };
   };
 
@@ -45,8 +46,7 @@ export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
   };
 
   return (
-    <div className="w-full  aspect-[2.5/1]  rounded-lg relative font-sans">
-      {/* SVG map image */}
+    <div className="w-full aspect-[2.5/1] rounded-lg relative font-sans">
       <img
         src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
         className="h-full w-full object-cover pointer-events-none select-none"
@@ -55,8 +55,6 @@ export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
         width="1200"
         draggable={false}
       />
-
-      {/* Animated overlay paths */}
       <svg
         ref={svgRef}
         viewBox="0 0 900 450"
@@ -70,15 +68,12 @@ export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
             <stop offset="100%" stopColor="white" stopOpacity="0" />
           </linearGradient>
         </defs>
-
         {dots.map((dot, i) => {
           const start = projectPoint(dot.start.lat, dot.start.lng);
           const end = projectPoint(dot.end.lat, dot.end.lng);
           const pathId = `motion-path-${i}`;
-
           return (
             <g key={`group-${i}`}>
-              {/* Curved path */}
               <motion.path
                 id={pathId}
                 d={createCurvedPath(start, end)}
@@ -93,8 +88,6 @@ export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
                   ease: "easeInOut",
                 }}
               />
-
-              {/* Animated moving dot */}
               <circle r="3" fill={lineColor}>
                 <animateMotion
                   dur="2s"
@@ -105,8 +98,6 @@ export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
                   <mpath xlinkHref={`#${pathId}`} />
                 </animateMotion>
               </circle>
-
-              {/* Start and end pulsing dots */}
               {[start, end].map((point, j) => (
                 <g key={`pulse-${j}`}>
                   <circle cx={point.x} cy={point.y} r="2" fill={lineColor} />

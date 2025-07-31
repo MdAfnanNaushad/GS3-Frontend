@@ -1,236 +1,246 @@
 "use client";
-
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface Project {
-  id: string;
+  _id?: string;
   title: string;
   liveLink: string;
   caseStudyLink: string;
-  imageUrl: string;
+  imageUrl?: string;
+  logoUrl?: string;
+  isSelected?: boolean;
 }
 
-const dummyProjects: Project[] = [
-  {
-    id: "1",
-    title: "The Dawn Of Innovation",
-    liveLink: "https://chatbot.com",
-    caseStudyLink: "https://case-study.com/chatbot",
-    imageUrl: "/project/default.png",
-  },
-  {
-    id: "2",
-    title: "The Joy of Creation",
-    liveLink: "https://ecommerce.com",
-    caseStudyLink: "https://case-study.com/ecommerce",
-    imageUrl: "/project/default.png",
-  },
-];
-
 const ProjectsPage = () => {
-  const [projects, setProjects] = useState<Project[]>(dummyProjects);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
-
+  const [projects, setProjects] = useState<Project[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     liveLink: "",
     caseStudyLink: "",
+    isSelected: false,
+  });
+  const [image, setImage] = useState<File | null>(null);
+  const [logo, setLogo] = useState<File | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const api = axios.create({
+    baseURL: "http://localhost:8000/api/v1",
+    withCredentials: true,
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
+  const fetchProjects = async () => {
+    try {
+      const res = await api.get("/work");
+      setProjects(res.data.data);
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  useEffect(() => {
+    fetchProjects();
+  });
+
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      liveLink: "",
+      caseStudyLink: "",
+      isSelected: false,
+    });
+    setImage(null);
+    setLogo(null);
+    setEditingId(null);
+    (document.getElementById("image-input") as HTMLInputElement).value = "";
+    (document.getElementById("logo-input") as HTMLInputElement).value = "";
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId) {
-      setProjects((prev) =>
-        prev.map((proj) =>
-          proj.id === editingId
-            ? {
-                ...proj,
-                ...formData,
-                imageUrl: imagePreview || proj.imageUrl,
-              }
-            : proj
-        )
-      );
-      setEditingId(null);
-    } else {
-      setProjects((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          ...formData,
-          imageUrl: imagePreview || "/project/default.png",
-        },
-      ]);
-    }
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("liveLink", formData.liveLink);
+    form.append("caseStudyLink", formData.caseStudyLink);
+    form.append("isSelected", String(formData.isSelected));
+    if (image) form.append("image", image);
+    if (logo) form.append("logo", logo);
 
-    // Reset form
-    setFormData({ title: "", liveLink: "", caseStudyLink: "" });
-    setImagePreview(null);
-  };
-
-  const handleEdit = (id: string) => {
-    const proj = projects.find((p) => p.id === id);
-    if (proj) {
-      setEditingId(proj.id);
-      setFormData({
-        title: proj.title,
-        liveLink: proj.liveLink,
-        caseStudyLink: proj.caseStudyLink,
-      });
-      setImagePreview(proj.imageUrl);
+    try {
+      if (editingId) {
+        await api.put(`/work/${editingId}`, form, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        await api.post("/work", form, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      fetchProjects();
+      resetForm();
+    } catch (error) {
+      console.error("Error saving project:", error);
     }
   };
 
-  const handleDelete = (id: string) => {
-    setProjects((prev) => prev.filter((proj) => proj.id !== id));
+  const handleEdit = (project: Project) => {
+    setFormData({
+      title: project.title,
+      liveLink: project.liveLink || "",
+      caseStudyLink: project.caseStudyLink || "",
+      isSelected: project.isSelected || false,
+    });
+    setEditingId(project._id || null);
+    window.scrollTo(0, 0);
+  };
+
+  const handleDelete = async (id: string) => {
+    const userIsSure = confirm("Are you sure you want to delete this project?");
+    if (userIsSure) {
+      try {
+        await api.delete(`/work/${id}`);
+        fetchProjects();
+      } catch (error) {
+        console.error("Failed to delete project:", error);
+      }
+    }
   };
 
   return (
-    <div className="w-full min-h-screen px-6 md:px-20 py-8 bg-transparent text-white">
-      <h1 className="text-3xl font-semibold lg:text-4xl  tracking-widest font-orbitron text-start mb-6 text-border-white">
-        Manage Projects
+    <div className="w-full px-6 py-5">
+      <h1 className="text-4xl tracking-widest text-border-white font-orbitron mb-3">
+        {editingId ? "Edit Project" : "Create Project"}
       </h1>
 
-      {/* Form */}
-      <div className="flex justify-center">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-lg space-y-8"
-          autoComplete="off"
-        >
-          {/* Title */}
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Title
-            </Label>
-            <Input
-              name="title"
-              type="text"
-              placeholder="Enter Project Title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-          </div>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 border-gray-500 border-2 bg-black/20 p-6 rounded-lg"
+      >
+        <div>
+          <Label>Title</Label>
+          <Input
+            name="title"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+            required
+          />
+        </div>
 
-          {/* Live Link */}
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Live Link
-            </Label>
-            <Input
-              name="liveLink"
-              type="url"
-              placeholder="https://your-live-link.com"
-              value={formData.liveLink}
-              onChange={handleInputChange}
-            />
-          </div>
+        <div>
+          <Label>Live Link</Label>
+          <Input
+            name="liveLink"
+            value={formData.liveLink}
+            onChange={(e) =>
+              setFormData({ ...formData, liveLink: e.target.value })
+            }
+          />
+        </div>
 
-          {/* Case Study Link */}
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Case Study Link
-            </Label>
-            <Input
-              name="caseStudyLink"
-              type="url"
-              placeholder="https://case-study-link.com"
-              value={formData.caseStudyLink}
-              onChange={handleInputChange}
-            />
-          </div>
+        <div>
+          <Label>Case Study Link</Label>
+          <Input
+            name="caseStudyLink"
+            value={formData.caseStudyLink}
+            onChange={(e) =>
+              setFormData({ ...formData, caseStudyLink: e.target.value })
+            }
+          />
+        </div>
 
-          {/* Image Upload */}
-          <div>
-            <Label className="text-xl text-gray-300 font-sans mb-2 block">
-              Project Image
-            </Label>
-            <Input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="mt-4 w-full h-60 object-cover rounded-md border border-gray-600"
-              />
-            )}
-          </div>
+        <div>
+          <Label>Project Image</Label>
+          <Input
+            id="image-input"
+            type="file"
+            onChange={(e) => setImage(e.target.files?.[0] || null)}
+          />
+        </div>
 
+        <div>
+          <Label>Company Logo (Optional)</Label>
+          <Input
+            id="logo-input"
+            type="file"
+            onChange={(e) => setLogo(e.target.files?.[0] || null)}
+          />
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Label>Show in "Selected Works"?</Label>
+          <input
+            type="checkbox"
+            className="h-5 w-5"
+            checked={formData.isSelected}
+            onChange={() =>
+              setFormData((prev) => ({ ...prev, isSelected: !prev.isSelected }))
+            }
+          />
+        </div>
+
+        <div className="flex gap-4">
           <button
             type="submit"
-            className="bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-700 hover:text-gray-200 transition duration-300 w-full"
+            className="bg-gray-600 hover:bg-gray-200 hover:text-gray-900  px-6 py-2 rounded-md duration-500 font-semibold"
           >
             {editingId ? "Update Project" : "Save Project"}
           </button>
-        </form>
-      </div>
-
-      {/* Projects List */}
-      <div className="mt-20">
-        <h2 className="text-2xl font-semibold font-orbitron mb-4 text-start">
-          Existing Projects
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="relative group bg-black/30 border border-gray-700 rounded-xl overflow-hidden p-4 flex flex-col justify-between"
+          {editingId && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="bg-gray-500 text-white px-6 py-2 rounded-md font-semibold"
             >
-              <img
-                src={project.imageUrl}
-                alt={project.title}
-                className="rounded-md object-cover w-full h-40 mb-4 border border-gray-600"
-              />
-              <h3 className="text-lg font-bold mb-1">{project.title}</h3>
-              <a
-                href={project.liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-blue-400 underline"
-              >
-                Live Site
-              </a>
-              <a
-                href={project.caseStudyLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-yellow-400 underline"
-              >
-                Case Study
-              </a>
-
-              <div className="flex gap-3 mt-4">
-                <button
-                  onClick={() => handleEdit(project.id)}
-                  className="text-sm px-4 py-2 bg-white text-black rounded-md hover:bg-gray-300"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(project.id)}
-                  className="text-sm px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+              Cancel Edit
+            </button>
+          )}
         </div>
+      </form>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        {projects.map((p) => (
+          <div
+            key={p._id}
+            className="bg-black/20 p-4 border border-gray-500 rounded-md"
+          >
+            {p.imageUrl && (
+              <img
+                src={p.imageUrl}
+                alt={p.title}
+                className="w-full h-40 object-cover mb-2 rounded"
+              />
+            )}
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold">{p.title}</h2>
+              {p.logoUrl && (
+                <img
+                  src={p.logoUrl}
+                  alt="logo"
+                  className="w-10 h-10 object-contain"
+                />
+              )}
+            </div>
+            <p>Selected: {p.isSelected ? "Yes" : "No"}</p>
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => handleEdit(p)}
+                className="bg-yellow-500 px-4 py-1 rounded"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(p._id!)}
+                className="text-red-500 bg-red-950/50 px-4 py-1 rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

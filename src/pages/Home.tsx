@@ -1,7 +1,7 @@
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import Hero from "@/layout/components/Hero";
 import logos from "@/data/devLogos.json";
-import { Projects } from "@/layout/components/Projects";
+import  Projects  from "@/layout/components/Projects";
 import Testimonial from "@/layout/components/Testimonials/Testimonial";
 
 import Team from "@/layout/components/Team/Team";

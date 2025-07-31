@@ -1,23 +1,42 @@
-// src/pages/all-projects.tsx
-import { BentoGrid, BentoGridItem } from "../components/ui/bento-grid";
-import { items } from "@/layout/components/Projects";
+// src/pages/AllProjects.tsx
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+
+// 1. Update the interface to include caseStudyId
+interface Project {
+  _id: string;
+  title: string;
+  imageUrl?: string;
+  liveLink?: string;
+  // The populated ID from the backend is an object
+  caseStudyId?: { _id: string; } | null;
+}
 
 export default function AllProjects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/api/v1/work").then((res) => {
+      setProjects(res.data.data);
+    });
+  }, []);
+
   return (
-    <main className="min-h-screen w-full flex flex-col m-8 px-4 py-10">
-      <h1 className="text-4xl font-orbitron text-border-white mb-6 mt-6">All Projects</h1>
+    <main className="min-h-screen w-full px-6 py-12">
+      <h1 className="text-4xl font-orbitron mb-8 text-white">All Projects</h1>
       <BentoGrid className="max-w-7xl mx-auto">
-        {items.map((item, i) => (
+        {projects.map((project) => (
           <BentoGridItem
-            key={i}
-            title={item.title}
-            imageUrl={item.imageUrl}
-            liveLink={item.liveLink}
-            caseStudyLink={item.caseStudyLink}
+            key={project._id}
+            title={project.title}
+            imageUrl={project.imageUrl}
+            liveLink={project.liveLink}
+            
+            caseStudyId={project.caseStudyId}
           />
         ))}
       </BentoGrid>
-      <h1 className="text-4xl font-orbitron text-border-white mb-6 mt-6 text-end">More Projects to come Soon..</h1>
     </main>
   );
 }

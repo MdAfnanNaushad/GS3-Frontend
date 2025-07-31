@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios, { isAxiosError } from "axios";
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,8 +23,17 @@ const ServicesPage = () => {
   } = useForm<ServiceFormData>();
 
   const [preview, setPreview] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const api = axios.create({
+    baseURL: "http://localhost:8000/api/v1",
+    withCredentials: true,
+  });
 
   const onSubmit = async (data: ServiceFormData) => {
+    setError("");
+    setSuccess("");
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -32,22 +42,19 @@ const ServicesPage = () => {
     }
 
     try {
-      const res = await fetch("/api/admin/services", {
-        method: "POST",
-        body: formData,
+      await api.post("/services/addservices", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
-      const result = await res.json();
-      if (res.ok) {
-        alert("Service added successfully.");
-        reset();
-        setPreview(null);
+      setSuccess("Service added successfully!");
+      reset();
+      setPreview(null);
+    } catch (err) {
+      if (isAxiosError(err)) {
+        setError(err.response?.data?.message || "Error adding service.");
       } else {
-        alert(result.message || "Error adding service.");
+        setError("An unexpected error occurred.");
       }
-    } catch (error) {
-      alert("Something went wrong.");
-      console.error(error);
+      console.error(err);
     }
   };
 
@@ -61,12 +68,13 @@ const ServicesPage = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto text-white">
-      <h1 className="text-4xl tracking-widest font-semibold mt-6 mb-6 font-orbitron text-border-white">Add New Service</h1>
+    <div className="w-full max-w-5xl  text-white p-4">
+      <h1 className="text-4xl tracking-widest font-semibold  mb-6 font-orbitron text-border-white">
+        Add New Service
+      </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Title */}
-        <div className="grid w-full gap-2">
+        <div className="grid w-full gap-2 ">
           <Label htmlFor="title">Service Title</Label>
           <Input
             id="title"
@@ -76,7 +84,6 @@ const ServicesPage = () => {
           />
         </div>
 
-        {/* Description */}
         <div className="grid w-full gap-2">
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -86,7 +93,6 @@ const ServicesPage = () => {
           />
         </div>
 
-        {/* Image Upload */}
         <div className="grid w-full gap-2">
           <Label htmlFor="image">Upload Image</Label>
           <Input
@@ -98,7 +104,6 @@ const ServicesPage = () => {
           />
         </div>
 
-        {/* Preview */}
         {preview && (
           <div className="mt-4">
             <p className="mb-2">Preview:</p>
@@ -110,7 +115,9 @@ const ServicesPage = () => {
           </div>
         )}
 
-        {/* Submit */}
+        {success && <p className="text-green-400">{success}</p>}
+        {error && <p className="text-red-400">{error}</p>}
+
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Adding..." : "Add Service"}
         </Button>

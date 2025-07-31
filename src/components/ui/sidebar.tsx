@@ -21,8 +21,12 @@ const Sidebar = () => {
     location.pathname === path ? "bg-muted font-semibold" : "";
 
   return (
-    <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block ">
-      <div className="space-y-6 sticky">
+    // --- THIS IS THE FIX ---
+    // Added 'h-screen' to make the sidebar full height.
+    // Added 'sticky' and 'top-0' to make it stick to the top of the viewport on scroll.
+    <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block h-screen sticky top-0">
+      {/* Removed 'sticky' from this inner div as it's now on the parent aside */}
+      <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-semibold mb-2 px-2 flex items-center gap-2">
             <img
@@ -30,8 +34,9 @@ const Sidebar = () => {
               src="/logo/GS3_logo.png"
               alt="GS3 Logo"
             />
-            GS3 Solutions
+            GS3 Solution
           </h2>
+          {/* Removed 'sticky' from this inner div as well */}
           <div className="space-y-1">
             <Link
               to="/admin"
@@ -104,6 +109,15 @@ const Sidebar = () => {
               >
                 <MessageCircle size={16} />
                 Contacts
+              </Link>
+              <Link
+                to="/admin/team"
+                className={`flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted ${isActive(
+                  "/admin/team"
+                )}`}
+              >
+                <MessageCircle size={16} />
+                Team Member
               </Link>
             </CollapsibleContent>
           </Collapsible>

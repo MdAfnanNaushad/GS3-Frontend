@@ -32,7 +32,7 @@ const EmployeePage = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
     withCredentials: true,
   });
 
@@ -54,7 +54,7 @@ const EmployeePage = () => {
     setValue("username", employee.username);
     setValue("email", employee.email);
     setValue("role", employee.role);
-    // Password is not pre-filled for security
+
     setValue("password", "");
     setImagePreview(employee.image || null);
     setIsModalOpen(true);
@@ -90,22 +90,22 @@ const EmployeePage = () => {
     }
 
     try {
-      // Explicitly type the response variable to avoid the 'any' type.
+ 
       let response: AxiosResponse<{ data: Employee }>;
 
       if (editingId) {
-        // Update existing employee
+
         response = await api.put(`/employees/update/${editingId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        // Update the list with the edited employee
+
         setEmployees(
           employees.map((emp) =>
             emp._id === editingId ? response.data.data : emp
           )
         );
       } else {
-        // Create new employee
+
         if (!data.password) {
           setError("Password is required for new employees.");
           return;
@@ -113,7 +113,6 @@ const EmployeePage = () => {
         response = await api.post("/employees/register", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        // Add the new employee to the top of the list
         setEmployees((prevEmployees) => [response.data.data, ...prevEmployees]);
       }
       closeModal();

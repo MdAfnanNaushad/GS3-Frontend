@@ -21,7 +21,7 @@ const Service = () => {
     const fetchServices = async () => {
       try {
         
-        const res = await axios.get("http://localhost:8000/api/v1/services");
+        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/services`);
         setServices(res.data.data);
       } catch (err) {
         setError("Failed to load services. Please try again later.");

@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-// Define interfaces for our data
 interface Project {
   _id: string;
   title: string;
@@ -47,7 +46,7 @@ const CaseStudyPage = () => {
   const [detailImage, setDetailImage] = useState<File | null>(null);
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
     withCredentials: true,
   });
 
@@ -112,14 +111,19 @@ const CaseStudyPage = () => {
 
     try {
       const res = await api.post("/case-studies/create", formData);
-      // Optimistic UI update
-      setCaseStudies(prev => [res.data.data, ...prev]);
-      alert("Case study created successfully!");
+      setCaseStudies((prev) => [res.data.data, ...prev]);
       // Reset form
-      setForm({ workId: "", title: "", tagline: "", description: "", team: "", result: "" });
+      setForm({
+        workId: "",
+        title: "",
+        tagline: "",
+        description: "",
+        team: "",
+        result: "",
+      });
       setHeroImage(null);
-      (document.querySelector('input[type="file"]') as HTMLInputElement).value = "";
-
+      (document.querySelector('input[type="file"]') as HTMLInputElement).value =
+        "";
     } catch (err) {
       if (isAxiosError(err)) {
         console.error("Failed to create case study:", err);
@@ -155,9 +159,8 @@ const CaseStudyPage = () => {
     }
   };
 
+
   const handleDeleteDetail = async (detailId: string) => {
-    if (!confirm("Are you sure you want to delete this detail section?"))
-      return;
 
     try {
       await api.delete(`/case-studies/details/${detailId}`);
@@ -174,15 +177,13 @@ const CaseStudyPage = () => {
     }
   };
 
-  // --- NEW: Handler to delete an entire case study ---
+
   const handleDeleteCaseStudy = async (caseStudyId: string) => {
-    if (!confirm("Are you sure you want to permanently delete this entire case study?")) return;
-    
+
     try {
       await api.delete(`/case-studies/${caseStudyId}`);
-      // Optimistic UI update: remove the case study from the list
-      setCaseStudies(prev => prev.filter(cs => cs._id !== caseStudyId));
-      alert("Case study deleted successfully.");
+
+      setCaseStudies((prev) => prev.filter((cs) => cs._id !== caseStudyId));
     } catch (err) {
       if (isAxiosError(err)) {
         console.error("Failed to delete case study:", err);
@@ -285,9 +286,8 @@ const CaseStudyPage = () => {
               )}
               )
             </p>
-            {/* --- THIS IS THE FIX --- */}
+
             <div className="flex items-center gap-4">
-              {/* Conditionally render the Remove button only for unlinked projects */}
               {!cs.workId && (
                 <button
                   onClick={() => handleDeleteCaseStudy(cs._id)}

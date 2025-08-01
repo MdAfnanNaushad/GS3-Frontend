@@ -16,7 +16,7 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/v1/work").then((res) => {
+    axios.get(`${import.meta.env.VITE_SERVER_URL}/work`).then((res) => {
       const selected = res.data.data.filter((item: Project) => item.isSelected);
       setProjects(selected);
     });

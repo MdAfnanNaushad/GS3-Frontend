@@ -31,7 +31,7 @@ export default function TeamPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
     withCredentials: true,
   });
 

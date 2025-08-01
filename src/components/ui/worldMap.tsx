@@ -15,9 +15,6 @@ interface MapProps {
 export function WorldMap({ dots = [], lineColor = "#0ea5e9" }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
 
-  // --- THIS IS THE FIX ---
-  // useMemo caches the result of these expensive operations.
-  // The map and SVG will now only be generated once.
   const svgMap = useMemo(() => {
     const map = new DottedMap({ height: 120, grid: "diagonal" });
     return map.getSVG({

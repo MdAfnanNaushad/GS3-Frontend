@@ -33,7 +33,7 @@ const Team = () => {
 
   const fetchTeam = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/team/all", {
+      const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/team/all`, {
         withCredentials: true,
       });
 

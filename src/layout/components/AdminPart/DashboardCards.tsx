@@ -1,4 +1,4 @@
-// src/components/DashboardCards.tsx
+
 import {
   Users,
   Briefcase,
@@ -12,17 +12,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Define a type for the card structure
 interface CardData {
   title: string;
   icon: LucideIcon;
   bg: string;
   link: string;
-  // This will be a key to look up the dynamic value from our state
   valueKey: keyof StatsData;
 }
 
-// Define a type for our dynamic stats state
 interface StatsData {
   team: number | string;
   clients: number | string;
@@ -32,7 +29,6 @@ interface StatsData {
   statistics: number | string;
 }
 
-// Keep the static part of the card data outside the component
 const cardDefinitions: CardData[] = [
   {
     title: "Team Members",
@@ -79,7 +75,6 @@ const cardDefinitions: CardData[] = [
 ];
 
 const DashboardCards = () => {
-  // State to hold the dynamic counts
   const [stats, setStats] = useState<StatsData>({
     team: 0,
     clients: "0+",
@@ -91,14 +86,13 @@ const DashboardCards = () => {
   const [loading, setLoading] = useState(true);
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}/api/v1`,
     withCredentials: true,
   });
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch all data points in parallel for better performance
         const [employeeRes, contactRes, serviceRes, projectRes, aboutRes] =
           await Promise.all([
             api.get("/employees/all"),
@@ -108,13 +102,11 @@ const DashboardCards = () => {
             api.get("/about"),
           ]);
 
-        // Find the "Clients Served" value from the about data stats array
         const clientsStat = aboutRes.data.data?.stats?.find(
           (stat: { label: string; value: string }) =>
             stat.label === "Clients Served"
         );
 
-        // Update the state with the fetched data
         setStats({
           team: employeeRes.data.data?.length || 0,
           clients: clientsStat?.value || "0+",
@@ -144,7 +136,6 @@ const DashboardCards = () => {
             <div>
               <p className="text-xl font-bold text-zinc-100">{card.title}</p>
               <h3 className="text-2xl font-bold mt-1">
-                {/* Display a loading indicator or the fetched value */}
                 {loading ? "..." : stats[card.valueKey]}
               </h3>
             </div>

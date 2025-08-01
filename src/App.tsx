@@ -27,10 +27,9 @@ import ServicesOffered from "./pages/Admin/ServicesOffered";
 import ClientServed from "./pages/Admin/ClientServed";
 import TeamPage from "./pages/Admin/TeamPage";
 
-// --- Correct Component Imports based on your clarification ---
-// Public-facing page for viewing a single case study
+
 import CaseStudy from "./layout/components/CaseStudies/CaseStudy";
-// Admin page for managing all case studies
+
 import CaseStudyPage from "./pages/Admin/CaseStudyPage";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);

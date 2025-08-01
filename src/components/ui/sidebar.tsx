@@ -21,11 +21,9 @@ const Sidebar = () => {
     location.pathname === path ? "bg-muted font-semibold" : "";
 
   return (
-    // --- THIS IS THE FIX ---
-    // Added 'h-screen' to make the sidebar full height.
-    // Added 'sticky' and 'top-0' to make it stick to the top of the viewport on scroll.
+
     <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block h-screen sticky top-0">
-      {/* Removed 'sticky' from this inner div as it's now on the parent aside */}
+      
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-semibold mb-2 px-2 flex items-center gap-2">

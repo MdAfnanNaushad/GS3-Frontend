@@ -52,7 +52,7 @@ const Contact = () => {
     setStatus({ loading: true, error: "", success: "" });
 
     try {
-      await axios.post("http://localhost:8000/api/v1/contact", {
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/contact`, {
         name,
         email,
         message,

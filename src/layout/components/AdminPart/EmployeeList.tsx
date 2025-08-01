@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
 
-// This interface should match the data structure from the API
 interface Employee {
   _id: string;
   username: string;
   email: string;
-  image?: string; // The backend provides the full URL
+  image?: string; 
   role: string;
 }
 
@@ -18,7 +17,7 @@ const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}/api/v1`,
     withCredentials: true,
   });
 
@@ -28,7 +27,7 @@ const EmployeeList = () => {
       setError("");
       const res = await api.get("/employees/all");
       if (res.data?.data) {
-        console.log("Fetched employees for list page:", res.data.data); // For debugging
+        console.log("Fetched employees for list page:", res.data.data); 
         setEmployees(res.data.data);
       }
     } catch (err) {
@@ -41,8 +40,7 @@ const EmployeeList = () => {
     }
   };
 
-  // This useEffect hook runs once when the component is mounted,
-  // ensuring you always get the latest list when you navigate to this page.
+
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -51,7 +49,7 @@ const EmployeeList = () => {
     if (!confirm("Are you sure you want to delete this employee?")) return;
     try {
       await api.delete(`/employees/delete/${id}`);
-      // After deleting, filter the employee out of the local state for an instant update.
+
       setEmployees(prevEmployees => prevEmployees.filter(emp => emp._id !== id));
     } catch (err) {
       console.error("Error deleting employee:", err);
@@ -60,8 +58,7 @@ const EmployeeList = () => {
   };
 
   const handleEdit = (id: string) => {
-    // In a real app, you would navigate to an edit page:
-    // navigate(`/admin/employees/edit/${id}`);
+ ;
     alert("Handle edit logic here for employee ID: " + id);
   };
 
@@ -83,7 +80,7 @@ const EmployeeList = () => {
               className="border border-gray-700 rounded-lg p-4 flex flex-col md:flex-row items-center gap-4 bg-black/20"
             >
               <img
-                // Use the full URL from the backend directly, with a fallback
+  
                 src={emp.image || "/employee_images/default.png"}
                 alt={emp.username}
                 className="w-24 h-24 rounded-full object-cover border border-gray-600"

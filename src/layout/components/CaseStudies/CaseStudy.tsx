@@ -57,7 +57,7 @@ const CaseStudy = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/api/v1/case-studies/${id}`
+          `${import.meta.env.VITE_SERVER_URL}/case-studies/${id}`
         );
         setCaseStudy(data.data.caseStudy);
         setScrollSections(data.data.details);

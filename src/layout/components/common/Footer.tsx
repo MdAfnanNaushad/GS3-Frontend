@@ -40,7 +40,6 @@ const Footer = () => {
     link: string;
   }
 
-
   const FooterSection = ({
     title,
     items,

@@ -1,15 +1,15 @@
-// src/pages/AllProjects.tsx
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 
-// 1. Update the interface to include caseStudyId
+
 interface Project {
   _id: string;
   title: string;
   imageUrl?: string;
   liveLink?: string;
-  // The populated ID from the backend is an object
+
   caseStudyId?: { _id: string; } | null;
 }
 
@@ -17,7 +17,7 @@ export default function AllProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/v1/work").then((res) => {
+    axios.get(`${import.meta.env.VITE_SERVER_URL}/work`).then((res) => {
       setProjects(res.data.data);
     });
   }, []);

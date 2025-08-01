@@ -23,7 +23,7 @@ const ProjectList = () => {
   const [newProjectName, setNewProjectName] = useState("");
 
   const api = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: `${import.meta.env.VITE_SERVER_URL}/api/v1`,
     withCredentials: true,
   });
 

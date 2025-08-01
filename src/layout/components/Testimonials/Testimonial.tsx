@@ -4,52 +4,52 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    name: "Aisha Khan",
-    role: "Product Designer",
+    name: "Pradeep Sadani",
+    role: "Sadani Realty",
     message:
-      "This platform transformed our workflow! The interface is intuitive and performance is unmatched.",
+      "We are highly satisfied with their work and look forward to continued collaboration!",
     image:
-      "https://plus.unsplash.com/premium_photo-1688740375397-34605b6abe48?w=600&auto=format&fit=crop&q=60",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1080,h=1395,fit=crop/ALpOL3M5PJiMVoKP/whatsapp-image-2025-03-10-at-00.46.58-A85e3RgZRyTVENXP.jpeg",
   },
   {
-    name: "Rahul Mehta",
-    role: "Full-Stack Developer",
+    name: "Gautam Halder",
+    role: "Bimala Production",
     message:
-      "Incredible attention to detail and thoughtful UI/UX. It's a pleasure to use every day.",
+      "Impressed with the efficiency and professionalism. The entire process was smooth and hassle-free.",
     image:
-      "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600&auto=format&fit=crop&q=60",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,fit=crop/ALpOL3M5PJiMVoKP/goutam-halder-m2W86RjeZ9HVZQ6b.png",
   },
   {
-    name: "Simran Das",
-    role: "UI Engineer",
+    name: "Kiran Santra ",
+    role: "Cadcare Director",
     message:
-      "A game-changer! The animations and performance blew us away in client demos.",
+      "GS3 Solution has done an excellent job with our website development and digital marketing.",
     image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=60",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,fit=crop/ALpOL3M5PJiMVoKP/kiran-mxB4kPGqjNHeDoE3.png",
   },
   {
-    name: "Aditya Roy",
-    role: "Tech Lead",
+    name: "Souvik Manna",
+    role: "Creatoplay Director",
     message:
-      "The best development experience I’ve had. Clean code, smooth transitions.",
+      "From website development to digital marketing, GS3 Solution has been a reliable partner",
     image:
-      "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=600&auto=format&fit=crop&q=60",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,fit=crop/ALpOL3M5PJiMVoKP/souvik-ALpelRVbqKfbBLvz.png",
   },
   {
-    name: "Megha Sinha",
-    role: "Marketing Strategist",
+    name: "Pradeep Murarka",
+    role: "Murarka Enterprize",
     message:
-      "Perfect blend of aesthetics and usability. We saw instant engagement rise.",
+      "Their expertise and dedication have truly helped our business grow!",
     image:
-      "https://images.unsplash.com/photo-1683829989980-2f78a0ca9879?w=600&auto=format&fit=crop&q=60",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,fit=crop/ALpOL3M5PJiMVoKP/murarka-Awv4Glyx2JIXlD9X.png",
   },
   {
-    name: "Ravi Prasad",
-    role: "QA Engineer",
+    name: "Sourav Kundu",
+    role: "TCA Chairman)",
     message:
-      "Thoroughly impressed with the responsiveness and accessibility built in.",
+      "Excellent service and professional approach! The team at GS3 Solution delivers innovative solutions.",
     image:
-      "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cHJvZmlsZSUyMHBob3RvfGVufDB8fDB8fHww",
+      "https://assets.zyrosite.com/cdn-cgi/image/format=auto,fit=crop/ALpOL3M5PJiMVoKP/img-20250303-wa0027-1-mjE7WJz3rXS2j7N3.jpg",
   },
   {
     name: "Zara Ali",

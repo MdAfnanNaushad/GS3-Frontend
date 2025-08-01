@@ -6,8 +6,9 @@ import {
   Twitter,
   ChevronDown,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -24,15 +25,21 @@ const Footer = () => {
       const isNowMobile = window.innerWidth < 768;
       setIsMobile(isNowMobile);
 
-      if (isNowMobile) {
-        requestAnimationFrame(() => setOpenSection(null));
+      if (!isNowMobile) {
+        setOpenSection(null);
       }
     };
 
-    handleResize();
     window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  interface FooterItem {
+    text: string;
+    link: string;
+  }
+
 
   const FooterSection = ({
     title,
@@ -40,18 +47,10 @@ const Footer = () => {
     sectionKey,
   }: {
     title: string;
-    items: string[];
+    items: FooterItem[];
     sectionKey: string;
   }) => {
-    const ref = useRef<HTMLUListElement>(null);
-    const [measuredHeight, setMeasuredHeight] = useState(0);
     const isOpen = openSection === sectionKey;
-
-    useEffect(() => {
-      if (isMobile && ref.current) {
-        setMeasuredHeight(ref.current.scrollHeight);
-      }
-    }, [isOpen, isMobile]);
 
     return (
       <div>
@@ -74,24 +73,27 @@ const Footer = () => {
           {(!isMobile || isOpen) && (
             <motion.ul
               key={sectionKey}
-              ref={ref}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{
-                height: isMobile ? measuredHeight : "auto",
-                opacity: 1,
-                transition: {
-                  height: { duration: 0.4, ease: "easeInOut" },
-                  opacity: { duration: 0.3, ease: "easeInOut" },
+              variants={{
+                open: {
+                  height: "auto",
+                  opacity: 1,
+                  transition: {
+                    height: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] },
+                    opacity: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
+                  },
+                },
+                collapsed: {
+                  height: 0,
+                  opacity: 0,
+                  transition: {
+                    height: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] },
+                    opacity: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
+                  },
                 },
               }}
-              exit={{
-                height: 0,
-                opacity: 0,
-                transition: {
-                  height: { duration: 0.4, ease: "easeInOut" },
-                  opacity: { duration: 0.2, ease: "easeInOut", delay: 0.1 },
-                },
-              }}
+              initial="collapsed"
+              animate="open"
+              exit="collapsed"
               style={{ overflow: "hidden" }}
               className={`space-y-2 text-sm ${
                 isMobile ? "text-gray-400" : "text-gray-200"
@@ -99,12 +101,12 @@ const Footer = () => {
             >
               {items.map((item, idx) => (
                 <li key={idx}>
-                  <a
-                    href="#"
+                  <Link
+                    to={item.link}
                     className="hover:text-white transition-all duration-300"
                   >
-                    {item}
-                  </a>
+                    {item.text}
+                  </Link>
                 </li>
               ))}
             </motion.ul>
@@ -113,6 +115,44 @@ const Footer = () => {
       </div>
     );
   };
+
+  const footerData = {
+    company: [
+      { text: "About Us", link: "/about" },
+      { text: "Careers", link: "/careers" },
+      { text: "Services", link: "/services" },
+      { text: "Contact Us", link: "/contact" },
+      { text: "Our Team", link: "/team" },
+    ],
+    solutions: [
+      { text: "Web Development", link: "/solutions/web-dev" },
+      { text: "Mobile Apps", link: "/solutions/mobile-apps" },
+      { text: "Integrations", link: "/solutions/integrations" },
+      { text: "Demos", link: "/demos" },
+      { text: "Pricing", link: "/pricing" },
+    ],
+    resources: [
+      { text: "Blog", link: "/blog" },
+      { text: "Documentation", link: "/docs" },
+      { text: "Case Studies", link: "/case-studies" },
+      { text: "Tutorials", link: "/tutorials" },
+      { text: "Built with GS3", link: "/showcase" },
+    ],
+    partners: [
+      { text: "Affiliate Program", link: "/partners/affiliates" },
+      { text: "App Partners", link: "/partners/apps" },
+      { text: "Solutions Partner", link: "/partners/solutions" },
+      { text: "Become a Partner", link: "/partners/join" },
+    ],
+  };
+
+  const socialLinks = [
+    { Icon: Facebook, link: "https://facebook.com" },
+    { Icon: Instagram, link: "https://instagram.com" },
+    { Icon: Youtube, link: "https://youtube.com" },
+    { Icon: Twitter, link: "https://twitter.com" },
+    { Icon: Linkedin, link: "https://linkedin.com" },
+  ];
 
   return (
     <footer className="bg-black text-white px-6 md:px-20 pt-16 pb-6 ">
@@ -142,33 +182,22 @@ const Footer = () => {
         <FooterSection
           title="Company"
           sectionKey="company"
-          items={["About Us", "Careers", "Services", "Contact Us", "Our Team"]}
+          items={footerData.company}
         />
         <FooterSection
           title="Solutions"
           sectionKey="solutions"
-          items={["Product A", "Product B", "Integrations", "Demos", "Pricing"]}
+          items={footerData.solutions}
         />
         <FooterSection
           title="Resources"
           sectionKey="resources"
-          items={[
-            "Blog",
-            "Documentation",
-            "Case Studies",
-            "Tutorials",
-            "Built with GS3",
-          ]}
+          items={footerData.resources}
         />
         <FooterSection
           title="Partners"
           sectionKey="partners"
-          items={[
-            "Affiliate Program",
-            "App Partners",
-            "Solutions Partner",
-            "Become a Partner",
-          ]}
+          items={footerData.partners}
         />
       </div>
 
@@ -177,7 +206,9 @@ const Footer = () => {
       <div className="mt-12 flex flex-col-reverse md:flex-row justify-between gap-10 font-roboto">
         <div className="md:w-1/2 text-sm text-gray-300 space-y-2 leading-relaxed">
           <p>
-            <strong className="text-2xl font-orbitron font-extrabold">Corporate Office</strong>
+            <strong className="text-2xl font-orbitron font-extrabold">
+              Corporate Office
+            </strong>
           </p>
           <p>(+91) 9733 140 877, (91) 7439 754 848</p>
           <p>
@@ -203,9 +234,21 @@ const Footer = () => {
             GS3 is a registered trademark. GS3 Solution is a Unit of Girizen
             Software Sales Service Solution Private Limited.
           </p>
-          <p>Terms & Condition | Privacy Policy | Refund Policy</p>
           <p>
-            Copyright © 2025–2026 Girizen Software Sales Service Solution
+            <Link to="/terms" className="hover:underline">
+              Terms & Condition
+            </Link>{" "}
+            |{" "}
+            <Link to="/privacy" className="hover:underline">
+              Privacy Policy
+            </Link>{" "}
+            |{" "}
+            <Link to="/refund-policy" className="hover:underline">
+              Refund Policy
+            </Link>
+          </p>
+          <p>
+            Copyright © 2024–2025 Girizen Software Sales Service Solution
             Private Limited. All Rights Reserved.
           </p>
           <p>
@@ -224,7 +267,7 @@ const Footer = () => {
           </h3>
           <div className="w-full h-[200px] sm:h-[250px] md:h-[300px] border-2 border-gray-400 rounded-xl overflow-hidden">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2831.1677980558597!2d-106.9574783239333!3d44.79776887107087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5335fabc2a6d206b%3A0x1887ab0668b2495c!2s30%20N%20Gould%20St%20Suite%20R%2C%20Sheridan%2C%20WY%2082801%2C%20USA!5e0!3m2!1sen!2sin!4v1752318591254!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2831.1677980558597!2d-106.9574783239333!3d44.79776887107087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5335fabc2a6d206b%3A0x1887ab0668b2495c!2s30%20N%2eGould%20St%20Suite%20R%2C%20Sheridan%2C%20WY%2082801%2C%20USA!5e0!3m2!1sen!2sin!4v1752318591254!5m2!1sen!2sin"
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -238,17 +281,17 @@ const Footer = () => {
         <div className="flex items-center justify-center my-6 gap-6">
           <hr className="flex-grow border-white/10" />
           <div className="flex gap-5 text-xl">
-            {[Facebook, Instagram, Youtube, Twitter, Linkedin].map(
-              (Icon, idx) => (
-                <a
-                  key={idx}
-                  href="#"
-                  className="hover:text-gray-200 transition"
-                >
-                  <Icon size={22} />
-                </a>
-              )
-            )}
+            {socialLinks.map(({ Icon, link }, idx) => (
+              <a
+                key={idx}
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-200 transition"
+              >
+                <Icon size={22} />
+              </a>
+            ))}
           </div>
           <hr className="flex-grow border-white/10" />
         </div>
@@ -257,16 +300,16 @@ const Footer = () => {
         </p>
         <div className="flex flex-wrap justify-center gap-3 text-xs text-white font-semibold">
           {[
-            "Legal Stuff",
-            "Privacy Policy",
-            "Security",
-            "Website Accessibility",
-            "Manage Cookies",
+            { text: "Legal Stuff", link: "/legal" },
+            { text: "Privacy Policy", link: "/privacy" },
+            { text: "Security", link: "/security" },
+            { text: "Website Accessibility", link: "/accessibility" },
+            { text: "Manage Cookies", link: "/cookies" },
           ]
-            .map((text, idx) => (
-              <a key={idx} href="#" className="hover:underline">
+            .map(({ text, link }, idx) => (
+              <Link key={idx} to={link} className="hover:underline">
                 {text}
-              </a>
+              </Link>
             ))
             .reduce(
               (acc, curr, idx, arr) =>

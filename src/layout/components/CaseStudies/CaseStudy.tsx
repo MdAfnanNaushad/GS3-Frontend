@@ -1,4 +1,3 @@
-// src/layout/components/CaseStudies/CaseStudy.tsx
 "use client";
 
 import { useParams } from "react-router-dom";
@@ -9,7 +8,6 @@ import { StickyScroll } from "@/components/ui/stick-scroll-reveal";
 import { Users, FileText, CheckCircle } from "lucide-react";
 import axios from "axios";
 import FlowingMenu from "@/components/reactbits/FlowingMenu";
-
 
 interface Detail {
   _id: string;
@@ -47,7 +45,6 @@ const headingVariants: Variants = {
   },
 };
 
-
 const CaseStudy = () => {
   const { id } = useParams<{ id: string }>();
   const [caseStudy, setCaseStudy] = useState<CaseStudyData | null>(null);
@@ -72,6 +69,7 @@ const CaseStudy = () => {
     };
     fetchData();
   }, [id]);
+
   const formattedMenuItems = relatedProjects.map((project) => ({
     text: project.title,
     image: project.imageUrl,
@@ -91,7 +89,7 @@ const CaseStudy = () => {
           <img
             src={caseStudy.heroImage}
             alt={caseStudy.title}
-            className="absolute inset-0 w-screen object-cover -z-10"
+            className="absolute inset-0 h-full w-full object-cover -z-10"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90 -z-10" />
@@ -100,7 +98,7 @@ const CaseStudy = () => {
           {/* Hero Title Section */}
           <div className="space-y-6 text-center lg:text-left">
             <motion.h1
-              className="font-orbitron text-4xl sm:text-5xl lg:text-6xl tracking-widest text-border-white"
+              className="font-orbitron text-3xl sm:text-5xl lg:text-6xl tracking-widest text-border-white"
               variants={headingVariants}
               initial="hidden"
               animate="visible"
@@ -109,14 +107,14 @@ const CaseStudy = () => {
             </motion.h1>
             <TextGenerate
               words={caseStudy.tagline || ""}
-              className="font-sans"
+              className="font-sans text-base md:text-xl"
             />
           </div>
 
           {/* Description */}
           <div className="space-y-6">
             <motion.h2
-              className="flex items-center gap-3 font-orbitron text-border-white tracking-widest text-6xl sm:text-3xl"
+              className="flex items-center gap-3 font-orbitron text-border-white tracking-widest text-2xl sm:text-3xl"
               variants={headingVariants}
               initial="hidden"
               whileInView="visible"
@@ -125,7 +123,7 @@ const CaseStudy = () => {
               <FileText className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
               Description
             </motion.h2>
-            <p className="text-neutral-300 leading-relaxed text-6xl  md:text-2xl">
+            <p className="text-neutral-300 leading-relaxed text-lg md:text-xl">
               {caseStudy.description}
             </p>
           </div>
@@ -143,10 +141,10 @@ const CaseStudy = () => {
                 <Users className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
                 Team
               </motion.h2>
-              <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-base md:text-lg text-neutral-300">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-base md:text-lg text-neutral-300">
                 {caseStudy.team.map((role: string) => (
                   <li key={role} className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 text-xl flex-shrink-0" />{" "}
+                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />{" "}
                     {role}
                   </li>
                 ))}
@@ -164,10 +162,10 @@ const CaseStudy = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                <CheckCircle className="w-7 h-7 sm:w-9 smh-9 text-white" />
+                <CheckCircle className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
                 Result
               </motion.h2>
-              <p className="text-neutral-300 leading-relaxed text-6xl md:text-2xl">
+              <p className="text-neutral-300 leading-relaxed text-lg md:text-xl">
                 {caseStudy.result}
               </p>
             </div>
@@ -201,7 +199,7 @@ const CaseStudy = () => {
         <div className="w-full bg-gray-800 py-16">
           <div className="max-w-7xl mx-auto px-4">
             <motion.h2
-              className="text-3xl sm:text-4xl md:text-5xl mb-12 font-bold font-orbitron text-border-white tracking-widest text-start"
+              className="text-2xl sm:text-3xl md:text-4xl mb-12 font-bold font-orbitron text-border-white tracking-widest text-start"
               variants={headingVariants}
               initial="hidden"
               whileInView="visible"

@@ -17,7 +17,7 @@ const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
 
   const api = axios.create({
-    baseURL: `${import.meta.env.VITE_SERVER_URL}/api/v1`,
+    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
     withCredentials: true,
   });
 

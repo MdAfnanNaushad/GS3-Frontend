@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("employee@example.com");
-  const [password, setPassword] = useState("employee123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

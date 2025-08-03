@@ -41,7 +41,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@example.com"
+          placeholder="Enter Email"
           className="mt-1 bg-white/10 text-white placeholder:text-zinc-400"
         />
       </div>
@@ -56,7 +56,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder="Enter Password"
           className="mt-1 bg-white/10 text-white placeholder:text-zinc-400"
         />
       </div>

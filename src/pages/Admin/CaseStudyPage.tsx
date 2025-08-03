@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -112,6 +112,7 @@ const CaseStudyPage = () => {
     try {
       const res = await api.post("/case-studies/create", formData);
       setCaseStudies((prev) => [res.data.data, ...prev]);
+      alert("Case study created successfully!");
       // Reset form
       setForm({
         workId: "",
@@ -145,6 +146,7 @@ const CaseStudyPage = () => {
     try {
       const res = await api.post("/case-studies/detail/create", formData);
       setDetails((prevDetails) => [...prevDetails, res.data.data]);
+       alert("Detail section added successfully!");
       setDetailForm({ title: "", description: "" });
       (
         document.getElementById("detail-image-input") as HTMLInputElement
@@ -167,6 +169,7 @@ const CaseStudyPage = () => {
       setDetails((prevDetails) =>
         prevDetails.filter((d) => d._id !== detailId)
       );
+      alert("Detail section deleted successfully!");
     } catch (err) {
       if (isAxiosError(err)) {
         console.error("Failed to delete detail:", err);
@@ -184,6 +187,7 @@ const CaseStudyPage = () => {
       await api.delete(`/case-studies/${caseStudyId}`);
 
       setCaseStudies((prev) => prev.filter((cs) => cs._id !== caseStudyId));
+      alert("Case study deleted successfully!");
     } catch (err) {
       if (isAxiosError(err)) {
         console.error("Failed to delete case study:", err);

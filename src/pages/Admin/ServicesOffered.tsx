@@ -22,7 +22,7 @@ const ServicesOffered = () => {
     const fetchServices = async () => {
       try {
        
-        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}`);
+        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/services`);
         setServices(res.data.data);
       } catch (err) {
         setError("Failed to load services. Please try again later.");

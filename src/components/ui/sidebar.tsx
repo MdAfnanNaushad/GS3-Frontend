@@ -7,6 +7,8 @@ import {
   MessageCircle,
   CaseSensitive,
   UserCog,
+  BrainCircuit,
+  FileUser
 } from "lucide-react";
 import {
   Collapsible,
@@ -114,8 +116,17 @@ const Sidebar = () => {
                   "/admin/team"
                 )}`}
               >
-                <MessageCircle size={16} />
+                <FileUser size={16} />
                 Team Member
+              </Link>
+              <Link
+                to="/admin/ai-training"
+                className={`flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted ${isActive(
+                  "/admin/ai-training"
+                )}`}
+              >
+                <BrainCircuit size={16} />
+                AI Training
               </Link>
             </CollapsibleContent>
           </Collapsible>

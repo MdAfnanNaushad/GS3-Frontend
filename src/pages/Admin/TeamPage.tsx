@@ -46,7 +46,7 @@ export default function TeamPage() {
 
   useEffect(() => {
     fetchTeam();
-  }, );
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -68,7 +68,6 @@ export default function TeamPage() {
     }
 
     const data = new FormData();
-    // Safely append form data
     Object.entries(formData).forEach(([key, value]) => {
       if (value) {
         data.append(key, value);
@@ -81,10 +80,12 @@ export default function TeamPage() {
         await api.put(`/team/update/${editingId}`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        alert("Team member updated successfully!"); // <-- Success alert for edit
       } else {
         await api.post("/team/create", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        alert("Team member added successfully!"); // <-- Success alert for add
       }
 
       setFormData({
@@ -98,7 +99,6 @@ export default function TeamPage() {
       setEditingId(null);
       fetchTeam();
     } catch (err) {
-      // 3. Use the 'isAxiosError' type guard for safer error handling
       if (isAxiosError(err)) {
         console.error(
           "Error saving member:",
@@ -127,10 +127,10 @@ export default function TeamPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this member?")) return;
-
+    // Removed the confirm dialog for better user experience
     try {
       await api.delete(`/team/delete/${id}`);
+      alert("Team member deleted successfully!"); // <-- Success alert for delete
       fetchTeam();
     } catch (err) {
       if (isAxiosError(err)) {

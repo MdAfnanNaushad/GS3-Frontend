@@ -31,7 +31,8 @@ import TeamPage from "./pages/Admin/TeamPage";
 import CaseStudy from "./layout/components/CaseStudies/CaseStudy";
 
 import CaseStudyPage from "./pages/Admin/CaseStudyPage";
-
+import ProtectedRoute from "./layout/components/Auth/ProtectedRoute";
+import AITrainingPage from "./pages/Admin/AITrainingPage";
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
 
 function App() {
@@ -112,7 +113,13 @@ function App() {
           />
 
           {/* --- ADMIN ROUTES --- */}
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin" element={
+            <ProtectedRoute>
+               <AdminLayout />
+            </ProtectedRoute>
+           
+            
+            }>
             <Route index element={<AdminPage />} />
             <Route path="projects" element={<ProjectsPage />} />
             <Route path="about" element={<AboutPage />} />
@@ -126,6 +133,7 @@ function App() {
             <Route path="active-employees" element={<EmployeeStatus />} />
             <Route path="services-offered" element={<ServicesOffered />} />
             <Route path="clients" element={<ClientServed />} />
+             <Route path="ai-training" element={<AITrainingPage />} />
             <Route path="team" element={<TeamPage />} />
           </Route>
 

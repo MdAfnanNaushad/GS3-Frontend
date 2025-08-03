@@ -73,15 +73,18 @@ const ProjectsPage = () => {
         await api.put(`/work/${editingId}`, form, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        alert("Project updated successfully!");
       } else {
         await api.post("/work", form, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        alert("Project created successfully!");
       }
       fetchProjects();
       resetForm();
     } catch (error) {
       console.error("Error saving project:", error);
+      alert("An error occurred while saving the project.");
     }
   };
 
@@ -101,9 +104,12 @@ const ProjectsPage = () => {
     if (userIsSure) {
       try {
         await api.delete(`/work/${id}`);
+        alert("Project deleted successfully!");
         fetchProjects();
       } catch (error) {
         console.error("Failed to delete project:", error);
+              alert("An error occurred while deleting the project.");
+
       }
     }
   };

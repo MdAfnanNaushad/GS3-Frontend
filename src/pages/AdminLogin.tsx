@@ -1,27 +1,27 @@
 import { AuthForm } from "@/layout/components/Auth/AuthForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios"; 
 import Layout from "@/layout/Layout";
 
+import axiosInstance from "@/API/axiosInstance"; 
+import { useAuth } from "@/Context/AuthContext";
 const AdminLogin = () => {
-  const [email, setEmail] = useState("admin@example.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
-        { email, password },
-        { withCredentials: true }
-      );
 
+      await axiosInstance.post("/auth/login", { email, password });
+      alert("Login Successful! Welcom Admin")
+      login();
       navigate("/admin");
     } catch (err) {
       if (isAxiosError(err)) {

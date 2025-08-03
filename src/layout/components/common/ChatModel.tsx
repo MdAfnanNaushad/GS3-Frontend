@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X, Minimize2 } from "lucide-react";
 import axios from "axios";
-import {type KeyboardEvent } from "react";
+import { type KeyboardEvent } from "react";
 
 const FloatingAIChat = ({
   open = false,
@@ -69,7 +69,7 @@ const FloatingAIChat = ({
       })
       .catch(() => {
         const aiMessage = {
-          text: "Somthing went Wrong",
+          text: "Something went wrong",
           isAI: true,
           timestamp: new Date().toLocaleTimeString([], {
             hour: "2-digit",
@@ -81,7 +81,7 @@ const FloatingAIChat = ({
       });
   };
 
-  const handleKeyPress = (e:KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -103,7 +103,7 @@ const FloatingAIChat = ({
             }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-6 right-6 w-[400px] text-xs font-orbitron bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 z-50 overflow-hidden"
+            className="fixed bottom-6 right-6 w-[400px] text-md font-sans bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 z-50 overflow-hidden"
           >
             {/* Header */}
             <div

@@ -8,7 +8,7 @@ import {
   CaseSensitive,
   UserCog,
   BrainCircuit,
-  FileUser
+  FileUser,
 } from "lucide-react";
 import {
   Collapsible,
@@ -23,11 +23,10 @@ const Sidebar = () => {
     location.pathname === path ? "bg-muted font-semibold" : "";
 
   return (
-
     <aside className="w-64 shrink-0 border-r bg-white p-4 dark:bg-zinc-950 hidden md:block h-screen sticky top-0">
-      
       <div className="space-y-6">
         <div>
+          <Link to="/">
           <h2 className="text-2xl font-semibold mb-2 px-2 flex items-center gap-2">
             <img
               className="h-8 w-8 object-contain"
@@ -36,7 +35,8 @@ const Sidebar = () => {
             />
             GS3 Solution
           </h2>
-          {/* Removed 'sticky' from this inner div as well */}
+          </Link>
+        
           <div className="space-y-1">
             <Link
               to="/admin"

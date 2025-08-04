@@ -77,7 +77,7 @@ const Footer = () => {
                   height: "auto",
                   opacity: 1,
                   transition: {
-                    height: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] },
+                    height: { duration: 1.4, ease: [1.4, 1.62, 1.23, 1.98] },
                     opacity: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
                   },
                 },
@@ -146,11 +146,11 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { Icon: Facebook, link: "https://facebook.com" },
+    { Icon: Facebook, link: "https://www.facebook.com/gs3websolution" },
     { Icon: Instagram, link: "https://instagram.com" },
-    { Icon: Youtube, link: "https://youtube.com" },
-    { Icon: Twitter, link: "https://twitter.com" },
-    { Icon: Linkedin, link: "https://linkedin.com" },
+    { Icon: Youtube, link: "https://www.youtube.com/@GS3_SOLUTION" },
+    { Icon: Twitter, link: "https://x.com/gs3solution" },
+    { Icon: Linkedin, link: "https://linkedin.com/company/girizen-software-sales-service-solution-pvt-ltd" },
   ];
 
   return (
@@ -299,11 +299,10 @@ const Footer = () => {
         </p>
         <div className="flex flex-wrap justify-center gap-3 text-xs text-white font-semibold">
           {[
-            { text: "Legal Stuff", link: "/legal" },
-            { text: "Privacy Policy", link: "/privacy" },
+            { text: "Legal Stuff", link: "/https://www.gs3solution.com/terms-and-conditions" },
+            { text: "Privacy Policy", link: "https://www.gs3solution.com/privacy-policy" },
             { text: "Security", link: "/security" },
-            { text: "Website Accessibility", link: "/accessibility" },
-            { text: "Manage Cookies", link: "/cookies" },
+            { text: "Refund Policy", link: "https://www.gs3solution.com/refund-policy" },
           ]
             .map(({ text, link }, idx) => (
               <Link key={idx} to={link} className="hover:underline">

@@ -10,7 +10,7 @@ import {
   updateStats,
   addTimeline,
   deleteTimeline,
-  updateTimeline, 
+  updateTimeline,
 } from "@/API/aboutApi";
 
 type TimelineItem = {
@@ -39,6 +39,7 @@ export default function AboutPage() {
     control: controlTimeline,
     handleSubmit: handleSubmitTimeline,
     reset: resetTimeline,
+    getValues,
   } = useForm<{ timeline: TimelineItem[] }>({
     defaultValues: { timeline: [] },
   });
@@ -52,19 +53,39 @@ export default function AboutPage() {
     name: "timeline",
   });
 
-  // 3. New state to manage displaying both existing and preview images
   const [imageDisplayUrls, setImageDisplayUrls] = useState<
     Record<number, string[]>
   >({});
+  
+  // 1. New state to track which timeline item is being edited
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const handleImageChange = (index: number, files: FileList | null) => {
     if (!files || files.length === 0) return;
     const urls = Array.from(files).map((file) => URL.createObjectURL(file));
-    // This replaces existing images with the new previews for this item
     setImageDisplayUrls((prev) => ({ ...prev, [index]: urls }));
   };
 
-  // 4. Refactored submit handler to manage both CREATE and UPDATE
+  const loadAboutData = async () => {
+    try {
+      const { data } = await fetchAbout();
+      if (data.data) {
+        resetStats({ stats: data.data.stats || [] });
+        resetTimeline({ timeline: data.data.timeline || [] });
+
+        const initialImageUrls: Record<number, string[]> = {};
+        data.data.timeline.forEach((item: TimelineItem, index: number) => {
+          if (item.images && Array.isArray(item.images)) {
+            initialImageUrls[index] = item.images;
+          }
+        });
+        setImageDisplayUrls(initialImageUrls);
+      }
+    } catch (err) {
+      console.error("Failed to load About data", err);
+    }
+  };
+
   const onSubmitTimeline = async (data: { timeline: TimelineItem[] }) => {
     try {
       await Promise.all(
@@ -75,7 +96,6 @@ export default function AboutPage() {
           formData.append("title", item.title);
           formData.append("description", item.description);
 
-          // Check if new images have been uploaded for this item
           if (item.images instanceof FileList && item.images.length > 0) {
             Array.from(item.images).forEach((img) =>
               formData.append("images", img)
@@ -83,10 +103,8 @@ export default function AboutPage() {
           }
 
           if (fieldId) {
-            // This is an EXISTING item, so we UPDATE it.
             await updateTimeline(fieldId, formData);
           } else {
-            // This is a NEW item. It must have images.
             if (!(item.images instanceof FileList) || item.images.length === 0) {
               throw new Error(
                 `Please add at least one image for the new timeline entry: "${item.title}"`
@@ -98,10 +116,8 @@ export default function AboutPage() {
       );
 
       alert("Timeline saved successfully!");
-      // Refetch data to get the latest state
-      const { data: aboutData } = await fetchAbout();
-      resetTimeline({ timeline: aboutData?.data?.timeline || [] });
-      setImageDisplayUrls({}); // Clear all previews
+      setEditingIndex(null); // Exit editing mode after saving
+      loadAboutData(); // Refetch data
     } catch (err) {
       const errorMessage =
         (isAxiosError(err) && err.response?.data?.message) ||
@@ -121,7 +137,9 @@ export default function AboutPage() {
       } else {
         removeTimeline(index);
       }
-      // Clean up the image display state
+      if (editingIndex === index) {
+        setEditingIndex(null); // Exit editing mode if the item is deleted
+      }
       setImageDisplayUrls((prev) => {
         const updated = { ...prev };
         delete updated[index];
@@ -131,6 +149,17 @@ export default function AboutPage() {
       console.error("Failed to delete timeline:", err);
       alert("Something went wrong while deleting timeline.");
     }
+  };
+  
+  const handleCancelEdit = (index: number) => {
+    const fieldId = timelineFields[index]?._id;
+    if (!fieldId) {
+        // If it's a new, unsaved item, just remove it from the form
+        removeTimeline(index);
+    }
+    setEditingIndex(null);
+    // Optionally, you could revert changes here, but for simplicity,
+    // we'll rely on the user saving or the component re-fetching.
   };
 
   const {
@@ -151,29 +180,8 @@ export default function AboutPage() {
     name: "stats",
   });
 
-  // 5. Updated data loading to populate the image display state
   useEffect(() => {
-    async function loadAbout() {
-      try {
-        const { data } = await fetchAbout();
-        if (data.data) {
-          resetStats({ stats: data.data.stats || [] });
-          resetTimeline({ timeline: data.data.timeline || [] });
-
-          // Populate the image display state with existing image URLs
-          const initialImageUrls: Record<number, string[]> = {};
-          data.data.timeline.forEach((item: TimelineItem, index: number) => {
-            if (item.images && Array.isArray(item.images)) {
-              initialImageUrls[index] = item.images;
-            }
-          });
-          setImageDisplayUrls(initialImageUrls);
-        }
-      } catch (err) {
-        console.error("Failed to load About data", err);
-      }
-    }
-    loadAbout();
+    loadAboutData();
   }, [resetStats, resetTimeline]);
 
   const onSubmitStats = (data: { stats: StatItem[] }) => {
@@ -197,95 +205,95 @@ export default function AboutPage() {
             key={field.id}
             className="border border-gray-700 rounded-lg p-6 space-y-4 bg-black/30"
           >
-            <div>
-              <Label className="text-xl block text-gray-300 mb-1">Year</Label>
-              <Input
-                placeholder="e.g., 2023"
-                {...registerTimeline(`timeline.${index}.year`, {
-                  required: true,
-                })}
-              />
-            </div>
-
-            <div>
-              <Label className="text-xl block text-gray-300 mb-1">Title</Label>
-              <Input
-                placeholder="e.g., Innovation Hub"
-                {...registerTimeline(`timeline.${index}.title`, {
-                  required: true,
-                })}
-              />
-            </div>
-
-            <div>
-              <Label className="text-xl block text-gray-300 mb-1">
-                Description
-              </Label>
-              <textarea
-                placeholder="Describe this milestone..."
-                className="w-full bg-transparent border border-gray-600 rounded-md px-4 py-2 text-white"
-                rows={4}
-                {...registerTimeline(`timeline.${index}.description`, {
-                  required: true,
-                })}
-              />
-            </div>
-
-            <div>
-              <Label className="text-xl block text-gray-300 mb-1">
-                Upload Images (required for new entries)
-              </Label>
-              <Input
-                type="file"
-                multiple
-                accept="image/*"
-                {...registerTimeline(`timeline.${index}.images`)}
-                onChange={(e) => handleImageChange(index, e.target.files)}
-              />
-              {/* 6. Simplified rendering logic for images */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-                {imageDisplayUrls[index]?.map((url, i) => (
-                  <img
-                    key={i}
-                    src={url}
-                    className="rounded-lg w-full h-40 object-cover"
-                    alt={`Preview ${i + 1}`}
+            {/* 2. Conditional rendering based on editingIndex */}
+            {editingIndex === index ? (
+              // EDITING VIEW
+              <>
+                <div>
+                  <Label className="text-xl block text-gray-300 mb-1">Year</Label>
+                  <Input
+                    placeholder="e.g., 2023"
+                    {...registerTimeline(`timeline.${index}.year`, { required: true })}
                   />
-                ))}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="text-red-500 border border-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md"
-              onClick={() => handleDeleteTimeline(field._id ?? "", index)}
-            >
-              Delete Entry
-            </button>
+                </div>
+                <div>
+                  <Label className="text-xl block text-gray-300 mb-1">Title</Label>
+                  <Input
+                    placeholder="e.g., Innovation Hub"
+                    {...registerTimeline(`timeline.${index}.title`, { required: true })}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xl block text-gray-300 mb-1">Description</Label>
+                  <textarea
+                    placeholder="Describe this milestone..."
+                    className="w-full bg-transparent border border-gray-600 rounded-md px-4 py-2 text-white"
+                    rows={4}
+                    {...registerTimeline(`timeline.${index}.description`, { required: true })}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xl block text-gray-300 mb-1">Upload Images</Label>
+                  <Input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    {...registerTimeline(`timeline.${index}.images`)}
+                    onChange={(e) => handleImageChange(index, e.target.files)}
+                  />
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                    {imageDisplayUrls[index]?.map((url, i) => (
+                      <img key={i} src={url} className="rounded-lg w-full h-40 object-cover" alt={`Preview ${i + 1}`} />
+                    ))}
+                  </div>
+                </div>
+                <button type="button" onClick={() => handleCancelEdit(index)} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
+                  Cancel
+                </button>
+              </>
+            ) : (
+              // READ-ONLY VIEW
+              <>
+                <div>
+                  <h3 className="text-xl font-bold">{getValues(`timeline.${index}.title`)}</h3>
+                  <p className="text-sm text-gray-400">{getValues(`timeline.${index}.year`)}</p>
+                </div>
+                <p className="text-gray-300">{getValues(`timeline.${index}.description`)}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                  {imageDisplayUrls[index]?.map((url, i) => (
+                    <img key={i} src={url} className="rounded-lg w-full h-40 object-cover" alt={`Image ${i + 1}`} />
+                  ))}
+                </div>
+                <div className="flex gap-4 mt-4">
+                    <button type="button" onClick={() => setEditingIndex(index)} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md">
+                        Edit
+                    </button>
+                    <button type="button" className="text-red-500 border border-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md" onClick={() => handleDeleteTimeline(field._id ?? "", index)}>
+                        Delete Entry
+                    </button>
+                </div>
+              </>
+            )}
           </div>
         ))}
 
         <div className="flex flex-wrap gap-6 items-center justify-center mt-8">
           <button
             type="button"
-            onClick={() =>
-              appendTimeline({
-                year: "",
-                title: "",
-                description: "",
-                images: null,
-              })
-            }
+            onClick={() => {
+              appendTimeline({ year: "", title: "", description: "", images: null });
+              // Automatically enter edit mode for the new item
+              setEditingIndex(timelineFields.length);
+            }}
             className="bg-white text-black px-6 py-3 rounded-md font-semibold hover:bg-gray-700 hover:text-gray-200 transition"
           >
             + Add Timeline Entry
           </button>
-
           <button
             type="submit"
             className="bg-green-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-700 transition"
           >
-            Save Timeline
+            Save All Changes
           </button>
         </div>
       </form>

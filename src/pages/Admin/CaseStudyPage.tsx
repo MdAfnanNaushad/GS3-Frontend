@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
-import { Input } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -146,7 +146,7 @@ const CaseStudyPage = () => {
     try {
       const res = await api.post("/case-studies/detail/create", formData);
       setDetails((prevDetails) => [...prevDetails, res.data.data]);
-       alert("Detail section added successfully!");
+      alert("Detail section added successfully!");
       setDetailForm({ title: "", description: "" });
       (
         document.getElementById("detail-image-input") as HTMLInputElement
@@ -292,14 +292,15 @@ const CaseStudyPage = () => {
             </p>
 
             <div className="flex items-center gap-4">
-              {!cs.workId && (
-                <button
-                  onClick={() => handleDeleteCaseStudy(cs._id)}
-                  className="text-sm text-red-500 hover:text-red-400"
-                >
-                  Remove
-                </button>
-              )}
+              {/* --- THIS IS THE FIX --- */}
+              {/* This button is now available for ALL case studies */}
+              <button
+                onClick={() => handleDeleteCaseStudy(cs._id)}
+                className="text-sm text-red-500 hover:text-red-400"
+              >
+                Remove
+              </button>
+              
               <button
                 onClick={() =>
                   setSelectedCaseStudyId(

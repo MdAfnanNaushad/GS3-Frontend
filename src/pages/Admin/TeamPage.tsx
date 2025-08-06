@@ -5,6 +5,7 @@ import axios, { isAxiosError } from "axios";
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import toast from "react-hot-toast"; // 1. Import toast
 
 interface TeamMember {
   _id: string;
@@ -41,6 +42,7 @@ export default function TeamPage() {
       setTeamMembers(res.data.data || []);
     } catch (err) {
       console.error("Error fetching team:", err);
+      toast.error("Failed to fetch team members.");
     }
   };
 
@@ -64,7 +66,7 @@ export default function TeamPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.position || !formData.bio) {
-      return alert("Please fill all required fields");
+      return toast.error("Please fill all required fields");
     }
 
     const data = new FormData();
@@ -80,12 +82,12 @@ export default function TeamPage() {
         await api.put(`/team/update/${editingId}`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Team member updated successfully!"); // <-- Success alert for edit
+        toast.success("Team member updated successfully!");
       } else {
         await api.post("/team/create", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Team member added successfully!"); // <-- Success alert for add
+        toast.success("Team member added successfully!");
       }
 
       setFormData({
@@ -99,16 +101,11 @@ export default function TeamPage() {
       setEditingId(null);
       fetchTeam();
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error(
-          "Error saving member:",
-          err.response?.data || err.message
-        );
-        alert(err.response?.data?.message || "An error occurred.");
-      } else {
-        console.error("An unexpected error occurred:", err);
-        alert("An unexpected error occurred.");
-      }
+      const message = isAxiosError(err)
+        ? err.response?.data?.message
+        : "An unexpected error occurred.";
+      toast.error(message || "An error occurred.");
+      console.error("Error saving member:", err);
     } finally {
       setLoading(false);
     }
@@ -127,19 +124,16 @@ export default function TeamPage() {
   };
 
   const handleDelete = async (id: string) => {
-    // Removed the confirm dialog for better user experience
     try {
       await api.delete(`/team/delete/${id}`);
-      alert("Team member deleted successfully!"); // <-- Success alert for delete
+      toast.success("Team member deleted successfully!");
       fetchTeam();
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error(
-          "Error deleting member:",
-          err.response?.data || err.message
-        );
-        alert(err.response?.data?.message || "Could not delete member.");
-      }
+      const message = isAxiosError(err)
+        ? err.response?.data?.message
+        : "Could not delete member.";
+      toast.error(message || "Could not delete member.");
+      console.error("Error deleting member:", err);
     }
   };
 

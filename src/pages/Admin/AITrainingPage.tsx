@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "@/API/axiosInstance";
 import { isAxiosError } from "axios";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import toast from "react-hot-toast"; // 1. Import toast
 
+// --- TypeScript Interfaces ---
 interface AIType {
   _id: string;
   name: string;
@@ -23,19 +25,22 @@ interface AIData {
 }
 
 const AITrainingPage = () => {
-
+  // --- State Management ---
   const [types, setTypes] = useState<AIType[]>([]);
   const [data, setData] = useState<AIData[]>([]);
 
+  // State for the "Type" form
   const [typeForm, setTypeForm] = useState({ name: "", description: "" });
   const [editingType, setEditingType] = useState<string | null>(null);
 
+  // State for the "Data" form
   const [dataForm, setDataForm] = useState({ type: "", text: "" });
   const [editingDataId, setEditingDataId] = useState<string | null>(null);
 
   const [, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // --- Data Fetching ---
   const fetchAll = async () => {
     try {
       setLoading(true);
@@ -58,24 +63,26 @@ const AITrainingPage = () => {
     fetchAll();
   }, []);
 
+  // --- "Type" CRUD Handlers ---
   const handleTypeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { name, description } = typeForm;
-    if (!name || !description) return alert("Name and description are required.");
+    if (!name || !description) return toast.error("Name and description are required.");
 
     try {
       if (editingType) {
         await axiosInstance.put(`/type/update/${editingType}`, { name, description });
-        alert("Type updated successfully!");
+        toast.success("Type updated successfully!");
       } else {
         await axiosInstance.post("/type/add", { name, description });
-        alert("Type created successfully!");
+        toast.success("Type created successfully!");
       }
       setTypeForm({ name: "", description: "" });
       setEditingType(null);
       fetchAll();
     } catch (err) {
-      if (isAxiosError(err)) alert(err.response?.data?.message || "An error occurred.");
+      const message = isAxiosError(err) ? err.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred.");
     }
   };
 
@@ -87,31 +94,34 @@ const AITrainingPage = () => {
   const handleDeleteType = async (id: string) => {
     try {
       await axiosInstance.delete(`/type/delete/${id}`);
-      alert("Type and all associated data deleted successfully!");
+      toast.success("Type and all associated data deleted successfully!");
       fetchAll();
     } catch (err) {
-      if (isAxiosError(err)) alert(err.response?.data?.message || "An error occurred.");
+      const message = isAxiosError(err) ? err.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred.");
     }
   };
 
+  // --- "Data" CRUD Handlers ---
   const handleDataSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { type, text } = dataForm;
-    if (!type || !text) return alert("Please select a type and provide data content.");
+    if (!type || !text) return toast.error("Please select a type and provide data content.");
 
     try {
       if (editingDataId) {
         await axiosInstance.put(`/data/update/${editingDataId}`, { text });
-        alert("Data updated successfully!");
+        toast.success("Data updated successfully!");
       } else {
         await axiosInstance.post("/data/add", { type, text });
-        alert("Data created successfully!");
+        toast.success("Data created successfully!");
       }
       setDataForm({ type: "", text: "" });
       setEditingDataId(null);
       fetchAll();
     } catch (err) {
-      if (isAxiosError(err)) alert(err.response?.data?.message || "An error occurred.");
+      const message = isAxiosError(err) ? err.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred.");
     }
   };
 
@@ -123,10 +133,11 @@ const AITrainingPage = () => {
   const handleDeleteData = async (id: string) => {
     try {
       await axiosInstance.delete(`/data/delete/${id}`);
-      alert("Data entry deleted successfully!");
+      toast.success("Data entry deleted successfully!");
       fetchAll();
     } catch (err) {
-      if (isAxiosError(err)) alert(err.response?.data?.message || "An error occurred.");
+      const message = isAxiosError(err) ? err.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred.");
     }
   };
 
@@ -168,7 +179,7 @@ const AITrainingPage = () => {
                 </div>
                 <div className="flex gap-3">
                   <button onClick={() => handleEditType(type)} className="bg-yellow-400 hover:bg-yellow-300 text-black py-1 px-2 rounded text-sm">Edit</button>
-                  <button onClick={() => handleDeleteType(type._id)} className="bg-red-500 bg:text-red-400 py-1 px-2 rounded text-sm">Delete</button>
+                  <button onClick={() => handleDeleteType(type._id)} className="bg-red-500 hover:bg-red-400 py-1 px-2 rounded text-sm">Delete</button>
                 </div>
               </div>
             ))}

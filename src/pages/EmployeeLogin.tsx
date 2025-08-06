@@ -3,6 +3,7 @@ import Layout from "@/layout/Layout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -18,11 +19,11 @@ const AdminLogin = () => {
         { withCredentials: true }
       );
 
-
       navigate("/");
+      toast.success("Login Successful")
     } catch (err) {
       console.error("Employee login failed:", err);
-      alert("Invalid employee credentials.");
+      toast.error("Invalid credentials")
     }
   };
 

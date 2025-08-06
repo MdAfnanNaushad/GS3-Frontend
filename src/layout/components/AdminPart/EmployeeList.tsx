@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
+import { X } from "lucide-react"; 
 
 interface Employee {
   _id: string;
   username: string;
   email: string;
-  image?: string; 
+  image?: string;
   role: string;
 }
 
@@ -15,6 +16,11 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+
+
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null
+  );
 
   const api = axios.create({
     baseURL: `${import.meta.env.VITE_SERVER_URL}`,
@@ -27,7 +33,6 @@ const EmployeeList = () => {
       setError("");
       const res = await api.get("/employees/all");
       if (res.data?.data) {
-        console.log("Fetched employees for list page:", res.data.data); 
         setEmployees(res.data.data);
       }
     } catch (err) {
@@ -40,26 +45,20 @@ const EmployeeList = () => {
     }
   };
 
-
   useEffect(() => {
     fetchEmployees();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this employee?")) return;
-    try {
-      await api.delete(`/employees/delete/${id}`);
 
-      setEmployees(prevEmployees => prevEmployees.filter(emp => emp._id !== id));
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-      setError("Failed to delete employee.");
+  const handleViewDetails = (id: string) => {
+    const employee = employees.find((emp) => emp._id === id);
+    if (employee) {
+      setSelectedEmployee(employee);
     }
   };
 
-  const handleEdit = (id: string) => {
- ;
-    alert("Handle edit logic here for employee ID: " + id);
+  const closeModal = () => {
+    setSelectedEmployee(null);
   };
 
   return (
@@ -69,7 +68,7 @@ const EmployeeList = () => {
       </h1>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      
+
       {loading ? (
         <p>Loading team members...</p>
       ) : (
@@ -80,8 +79,7 @@ const EmployeeList = () => {
               className="border border-gray-700 rounded-lg p-4 flex flex-col md:flex-row items-center gap-4 bg-black/20"
             >
               <img
-  
-                src={emp.image || "/employee_images/default.png"}
+                src={emp.image || "/team/default.png"}
                 alt={emp.username}
                 className="w-24 h-24 rounded-full object-cover border border-gray-600"
               />
@@ -92,20 +90,37 @@ const EmployeeList = () => {
               </div>
               <div className="flex gap-3 mt-4 md:mt-0">
                 <button
-                  onClick={() => handleEdit(emp._id)}
-                  className="text-sm px-4 py-2 bg-white text-black rounded-md hover:bg-gray-300"
+                  onClick={() => handleViewDetails(emp._id)}
+                  className="text-sm px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-200 hover:text-gray-900 duration-500"
                 >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(emp._id)}
-                  className="text-sm px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Delete
+                  View Details
                 </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {selectedEmployee && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-zinc-900 border border-gray-700 p-8 rounded-xl w-full max-w-md relative text-center">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X size={24} />
+            </button>
+            <img
+              src={selectedEmployee.image || "/team/default.png"}
+              alt={selectedEmployee.username}
+              className="w-32 h-32 rounded-full object-cover border-2 border-gray-600 mx-auto mb-4"
+            />
+            <h2 className="text-2xl font-bold">{selectedEmployee.username}</h2>
+            <p className="text-gray-400">{selectedEmployee.email}</p>
+            <p className="text-yellow-400 font-semibold mt-1">
+              {selectedEmployee.role}
+            </p>
+          </div>
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import Layout from "@/layout/Layout";
 
 import axiosInstance from "@/API/axiosInstance"; 
 import { useAuth } from "@/Context/AuthContext";
+import toast from "react-hot-toast";
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +21,7 @@ const AdminLogin = () => {
     try {
 
       await axiosInstance.post("/auth/login", { email, password });
-      alert("Login Successful! Welcom Admin")
+      toast.success("LogIn Successful Welcome Back Admin")
       login();
       navigate("/admin");
     } catch (err) {
@@ -30,6 +31,7 @@ const AdminLogin = () => {
           "Invalid admin credentials or server error.";
         setError(errorMessage);
         console.error("Admin login failed:", err.response?.data || err.message);
+        toast.error("Invalid credentials")
       } else {
         setError("An unexpected error occurred.");
         console.error("An unexpected error occurred:", err);

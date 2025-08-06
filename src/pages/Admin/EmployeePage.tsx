@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import axiosInstance from "@/API/axiosInstance";
+import { isAxiosError, type AxiosResponse } from "axios";
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
-import axios, { isAxiosError, type AxiosResponse } from "axios";
-import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 type Employee = {
   _id: string;
@@ -18,7 +20,7 @@ type Employee = {
 type FormData = {
   username: string;
   email: string;
-  password?: string; // Password is now optional, only for creation
+  password?: string;
   role: string;
 };
 
@@ -31,17 +33,13 @@ const EmployeePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const api = axios.create({
-    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
-    withCredentials: true,
-  });
-
   const fetchEmployees = async () => {
     try {
-      const res = await api.get("/employees/all");
+      const res = await axiosInstance.get("/employees/all");
       setEmployees(res.data.data);
     } catch (err) {
       console.error("Error fetching employees:", err);
+      toast.error("Failed to fetch employees.");
     }
   };
 
@@ -54,7 +52,6 @@ const EmployeePage = () => {
     setValue("username", employee.username);
     setValue("email", employee.email);
     setValue("role", employee.role);
-
     setValue("password", "");
     setImagePreview(employee.image || null);
     setIsModalOpen(true);
@@ -90,37 +87,33 @@ const EmployeePage = () => {
     }
 
     try {
- 
       let response: AxiosResponse<{ data: Employee }>;
-
       if (editingId) {
-
-        response = await api.put(`/employees/update/${editingId}`, formData, {
+        response = await axiosInstance.put(`/employees/update/${editingId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-
         setEmployees(
           employees.map((emp) =>
             emp._id === editingId ? response.data.data : emp
           )
         );
+        toast.success("Employee updated successfully!");
       } else {
-
         if (!data.password) {
           setError("Password is required for new employees.");
           return;
         }
-        response = await api.post("/employees/register", formData, {
+        response = await axiosInstance.post("/employees/register", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         setEmployees((prevEmployees) => [response.data.data, ...prevEmployees]);
+        toast.success("Employee added successfully!");
       }
       closeModal();
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Error saving employee:", err);
-        setError(err.response?.data?.message || "Failed to save employee.");
-      }
+      const message = isAxiosError(err) ? err.response?.data?.message : "Failed to save employee.";
+      setError(message || "Failed to save employee.");
+      console.error("Error saving employee:", err);
     }
   };
 
@@ -133,13 +126,13 @@ const EmployeePage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this employee?")) return;
     try {
-      await api.delete(`/employees/delete/${id}`);
+      await axiosInstance.delete(`/employees/delete/${id}`);
       setEmployees(employees.filter((emp) => emp._id !== id));
+      toast.success("Employee deleted successfully!");
     } catch (err) {
+      toast.error("Failed to delete employee.");
       console.error("Error deleting employee:", err);
-      setError("Failed to delete employee.");
     }
   };
 

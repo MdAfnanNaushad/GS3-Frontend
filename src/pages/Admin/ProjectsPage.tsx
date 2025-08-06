@@ -1,8 +1,11 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import axiosInstance from "@/API/axiosInstance";
+import { isAxiosError } from "axios";
 import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import toast from "react-hot-toast";
 
 interface Project {
   _id?: string;
@@ -26,23 +29,19 @@ const ProjectsPage = () => {
   const [logo, setLogo] = useState<File | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const api = axios.create({
-    baseURL: `${import.meta.env.VITE_SERVER_URL}`,
-    withCredentials: true,
-  });
-
   const fetchProjects = async () => {
     try {
-      const res = await api.get("/work");
+      const res = await axiosInstance.get("/work");
       setProjects(res.data.data);
     } catch (error) {
       console.error("Failed to fetch projects:", error);
+      toast.error("Failed to fetch projects.");
     }
   };
 
   useEffect(() => {
     fetchProjects();
-  });
+  }, []);
 
   const resetForm = () => {
     setFormData({
@@ -70,21 +69,22 @@ const ProjectsPage = () => {
 
     try {
       if (editingId) {
-        await api.put(`/work/${editingId}`, form, {
+        await axiosInstance.put(`/work/${editingId}`, form, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Project updated successfully!");
+        toast.success("Project updated successfully!");
       } else {
-        await api.post("/work", form, {
+        await axiosInstance.post("/work", form, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Project created successfully!");
+        toast.success("Project created successfully!");
       }
       fetchProjects();
       resetForm();
     } catch (error) {
+      const message = isAxiosError(error) ? error.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred while saving the project.");
       console.error("Error saving project:", error);
-      alert("An error occurred while saving the project.");
     }
   };
 
@@ -100,22 +100,19 @@ const ProjectsPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const userIsSure = confirm("Are you sure you want to delete this project?");
-    if (userIsSure) {
-      try {
-        await api.delete(`/work/${id}`);
-        alert("Project deleted successfully!");
-        fetchProjects();
-      } catch (error) {
-        console.error("Failed to delete project:", error);
-              alert("An error occurred while deleting the project.");
-
-      }
+    try {
+      await axiosInstance.delete(`/work/${id}`);
+      toast.success("Project deleted successfully!");
+      fetchProjects();
+    } catch (error) {
+      const message = isAxiosError(error) ? error.response?.data?.message : "An error occurred.";
+      toast.error(message || "An error occurred while deleting the project.");
+      console.error("Failed to delete project:", error);
     }
   };
 
   return (
-    <div className="w-full px-6 py-5">
+    <div className="w-full px-6 py-5 text-white">
       <h1 className="text-4xl tracking-widest text-border-white font-orbitron mb-3">
         {editingId ? "Edit Project" : "Create Project"}
       </h1>

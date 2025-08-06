@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import axios, { isAxiosError } from "axios";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import toast from "react-hot-toast"; // 1. Import toast
 
 interface Project {
   _id: string;
@@ -112,7 +113,7 @@ const CaseStudyPage = () => {
     try {
       const res = await api.post("/case-studies/create", formData);
       setCaseStudies((prev) => [res.data.data, ...prev]);
-      alert("Case study created successfully!");
+      toast.success("Case study created successfully!"); // Replaced alert
       // Reset form
       setForm({
         workId: "",
@@ -126,10 +127,9 @@ const CaseStudyPage = () => {
       (document.querySelector('input[type="file"]') as HTMLInputElement).value =
         "";
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Failed to create case study:", err);
-        setError(err.response?.data?.message || "Could not create case study.");
-      }
+      const message = isAxiosError(err) ? err.response?.data?.message : "Could not create case study.";
+      toast.error(message || "Could not create case study.");
+      console.error("Failed to create case study:", err);
     }
   };
 
@@ -146,53 +146,43 @@ const CaseStudyPage = () => {
     try {
       const res = await api.post("/case-studies/detail/create", formData);
       setDetails((prevDetails) => [...prevDetails, res.data.data]);
-      alert("Detail section added successfully!");
+      toast.success("Detail section added successfully!"); // Replaced alert
       setDetailForm({ title: "", description: "" });
       (
         document.getElementById("detail-image-input") as HTMLInputElement
       ).value = "";
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Failed to add detail:", err);
-        setError(
-          err.response?.data?.message || "Could not add detail section."
-        );
-      }
+      const message = isAxiosError(err) ? err.response?.data?.message : "Could not add detail section.";
+      toast.error(message || "Could not add detail section.");
+      console.error("Failed to add detail:", err);
     }
   };
 
 
   const handleDeleteDetail = async (detailId: string) => {
-
     try {
       await api.delete(`/case-studies/details/${detailId}`);
       setDetails((prevDetails) =>
         prevDetails.filter((d) => d._id !== detailId)
       );
-      alert("Detail section deleted successfully!");
+      toast.success("Detail section deleted successfully!"); // Replaced alert
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Failed to delete detail:", err);
-        setError(
-          err.response?.data?.message || "Could not delete detail section."
-        );
-      }
+      const message = isAxiosError(err) ? err.response?.data?.message : "Could not delete detail section.";
+      toast.error(message || "Could not delete detail section.");
+      console.error("Failed to delete detail:", err);
     }
   };
 
 
   const handleDeleteCaseStudy = async (caseStudyId: string) => {
-
     try {
       await api.delete(`/case-studies/${caseStudyId}`);
-
       setCaseStudies((prev) => prev.filter((cs) => cs._id !== caseStudyId));
-      alert("Case study deleted successfully!");
+      toast.success("Case study deleted successfully!"); // Replaced alert
     } catch (err) {
-      if (isAxiosError(err)) {
-        console.error("Failed to delete case study:", err);
-        setError(err.response?.data?.message || "Could not delete case study.");
-      }
+      const message = isAxiosError(err) ? err.response?.data?.message : "Could not delete case study.";
+      toast.error(message || "Could not delete case study.");
+      console.error("Failed to delete case study:", err);
     }
   };
 
@@ -292,8 +282,6 @@ const CaseStudyPage = () => {
             </p>
 
             <div className="flex items-center gap-4">
-              {/* --- THIS IS THE FIX --- */}
-              {/* This button is now available for ALL case studies */}
               <button
                 onClick={() => handleDeleteCaseStudy(cs._id)}
                 className="text-sm text-red-500 hover:text-red-400"

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "@/API/axiosInstance";
 import { isAxiosError } from "axios";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast"; // 1. Import toast
 
 // Interfaces for our data structures
 interface Service {
@@ -35,8 +36,7 @@ const ServicesPage = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  // Note: error and success states are no longer needed as toast handles UI
 
   // --- Data Fetching ---
   const fetchServices = async () => {
@@ -45,7 +45,7 @@ const ServicesPage = () => {
       setServices(res.data.data || []);
     } catch (err) {
       console.error("Failed to fetch services:", err);
-      setError("Could not load services.");
+      toast.error("Could not load services."); // Replaced setError
     }
   };
 
@@ -67,13 +67,9 @@ const ServicesPage = () => {
     reset();
     setEditingId(null);
     setPreview(null);
-    setError("");
-    setSuccess("");
   };
 
   const onSubmit = async (data: ServiceFormData) => {
-    setError("");
-    setSuccess("");
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -87,13 +83,13 @@ const ServicesPage = () => {
         await axiosInstance.put(`/services/update/${editingId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        setSuccess("Service updated successfully!");
+        toast.success("Service updated successfully!"); // Replaced setSuccess
       } else {
         // Create new service
         await axiosInstance.post("/services/add", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        setSuccess("Service added successfully!");
+        toast.success("Service created successfully!"); // Replaced setSuccess
       }
       resetForm();
       fetchServices(); // Refresh the list
@@ -101,7 +97,7 @@ const ServicesPage = () => {
       const message = isAxiosError(err)
         ? err.response?.data?.message
         : "An unexpected error occurred.";
-      setError(message || "Failed to save the service.");
+      toast.error(message || "Failed to save the service."); // Replaced setError
       console.error("Error saving service:", err);
     }
   };
@@ -112,21 +108,19 @@ const ServicesPage = () => {
     setValue("title", service.title);
     setValue("description", service.description);
     setPreview(service.image || null); // Show existing image as preview
-    setError("");
-    setSuccess("");
     window.scrollTo(0, 0);
   };
 
   const handleDelete = async (id: string) => {
     try {
       await axiosInstance.delete(`/services/delete/${id}`);
-      setSuccess("Service deleted successfully!");
+      toast.success("Service deleted successfully!"); // Replaced setSuccess
       fetchServices();
     } catch (err) {
       const message = isAxiosError(err)
         ? err.response?.data?.message
         : "An unexpected error occurred.";
-      setError(message || "Failed to delete the service.");
+      toast.error(message || "Failed to delete the service."); // Replaced setError
       console.error("Error deleting service:", err);
     }
   };
@@ -166,9 +160,8 @@ const ServicesPage = () => {
             <img src={preview} alt="Service preview" className="w-full max-h-64 object-contain border border-white/20 rounded" />
           </div>
         )}
-
-        {success && <p className="text-green-400">{success}</p>}
-        {error && <p className="text-red-400">{error}</p>}
+        
+        {/* Removed the success and error p tags */}
 
         <div className="flex gap-4">
             <Button className="bg-gray-700 text-white hover:bg-gray-200 hover:text-gray-900 duration-500" type="submit" disabled={isSubmitting}>

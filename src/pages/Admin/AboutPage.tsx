@@ -12,6 +12,7 @@ import {
   deleteTimeline,
   updateTimeline,
 } from "@/API/aboutApi";
+import toast from "react-hot-toast"; // 1. Import toast
 
 type TimelineItem = {
   _id?: string;
@@ -56,8 +57,7 @@ export default function AboutPage() {
   const [imageDisplayUrls, setImageDisplayUrls] = useState<
     Record<number, string[]>
   >({});
-  
-  // 1. New state to track which timeline item is being edited
+
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const handleImageChange = (index: number, files: FileList | null) => {
@@ -83,6 +83,7 @@ export default function AboutPage() {
       }
     } catch (err) {
       console.error("Failed to load About data", err);
+      toast.error("Failed to load About page data.");
     }
   };
 
@@ -105,7 +106,10 @@ export default function AboutPage() {
           if (fieldId) {
             await updateTimeline(fieldId, formData);
           } else {
-            if (!(item.images instanceof FileList) || item.images.length === 0) {
+            if (
+              !(item.images instanceof FileList) ||
+              item.images.length === 0
+            ) {
               throw new Error(
                 `Please add at least one image for the new timeline entry: "${item.title}"`
               );
@@ -115,15 +119,15 @@ export default function AboutPage() {
         })
       );
 
-      alert("Timeline saved successfully!");
-      setEditingIndex(null); // Exit editing mode after saving
-      loadAboutData(); // Refetch data
+      toast.success("Timeline saved successfully!"); // Replaced alert
+      setEditingIndex(null);
+      loadAboutData();
     } catch (err) {
       const errorMessage =
         (isAxiosError(err) && err.response?.data?.message) ||
         (err as Error).message ||
         "An error occurred while saving.";
-      alert(errorMessage);
+      toast.error(errorMessage); // Replaced alert
       console.error("Error saving timeline:", err);
     }
   };
@@ -133,12 +137,12 @@ export default function AboutPage() {
       if (mongoId) {
         await deleteTimeline(mongoId);
         removeTimeline(index);
-        alert("Timeline entry deleted!");
+        toast.success("Timeline entry deleted!"); // Replaced alert
       } else {
         removeTimeline(index);
       }
       if (editingIndex === index) {
-        setEditingIndex(null); // Exit editing mode if the item is deleted
+        setEditingIndex(null);
       }
       setImageDisplayUrls((prev) => {
         const updated = { ...prev };
@@ -147,19 +151,16 @@ export default function AboutPage() {
       });
     } catch (err) {
       console.error("Failed to delete timeline:", err);
-      alert("Something went wrong while deleting timeline.");
+      toast.error("Something went wrong while deleting timeline."); // Replaced alert
     }
   };
-  
+
   const handleCancelEdit = (index: number) => {
     const fieldId = timelineFields[index]?._id;
     if (!fieldId) {
-        // If it's a new, unsaved item, just remove it from the form
-        removeTimeline(index);
+      removeTimeline(index);
     }
     setEditingIndex(null);
-    // Optionally, you could revert changes here, but for simplicity,
-    // we'll rely on the user saving or the component re-fetching.
   };
 
   const {
@@ -186,8 +187,11 @@ export default function AboutPage() {
 
   const onSubmitStats = (data: { stats: StatItem[] }) => {
     updateStats(data.stats)
-      .then(() => alert("Stats updated Successfully"))
-      .catch((err) => console.error("Failed to update Stats", err));
+      .then(() => toast.success("Stats updated Successfully")) // Replaced alert
+      .catch((err) => {
+        toast.error("Failed to update stats."); // Added error toast
+        console.error("Failed to update Stats", err);
+      });
   };
 
   return (
@@ -205,7 +209,6 @@ export default function AboutPage() {
             key={field.id}
             className="border border-gray-700 rounded-lg p-6 space-y-4 bg-black/30"
           >
-            {/* 2. Conditional rendering based on editingIndex */}
             {editingIndex === index ? (
               // EDITING VIEW
               <>
@@ -255,17 +258,23 @@ export default function AboutPage() {
               // READ-ONLY VIEW
               <>
                 <div>
-                  <h3 className="text-xl font-bold">{getValues(`timeline.${index}.title`)}</h3>
-                  <p className="text-sm text-gray-400">{getValues(`timeline.${index}.year`)}</p>
+                  <h3 className="text-xl font-bold">
+                    {getValues(`timeline.${index}.title`)}
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    {getValues(`timeline.${index}.year`)}
+                  </p>
                 </div>
-                <p className="text-gray-300">{getValues(`timeline.${index}.description`)}</p>
+                <p className="text-gray-300">
+                  {getValues(`timeline.${index}.description`)}
+                </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
                   {imageDisplayUrls[index]?.map((url, i) => (
                     <img key={i} src={url} className="rounded-lg w-full h-40 object-cover" alt={`Image ${i + 1}`} />
                   ))}
                 </div>
                 <div className="flex gap-4 mt-4">
-                    <button type="button" onClick={() => setEditingIndex(index)} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md">
+                    <button type="button" onClick={() => setEditingIndex(index)} className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-md font-semibold">
                         Edit
                     </button>
                     <button type="button" className="text-red-500 border border-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md" onClick={() => handleDeleteTimeline(field._id ?? "", index)}>
@@ -281,8 +290,12 @@ export default function AboutPage() {
           <button
             type="button"
             onClick={() => {
-              appendTimeline({ year: "", title: "", description: "", images: null });
-              // Automatically enter edit mode for the new item
+              appendTimeline({
+                year: "",
+                title: "",
+                description: "",
+                images: null,
+              });
               setEditingIndex(timelineFields.length);
             }}
             className="bg-white text-black px-6 py-3 rounded-md font-semibold hover:bg-gray-700 hover:text-gray-200 transition"

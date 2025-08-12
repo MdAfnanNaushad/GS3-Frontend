@@ -41,7 +41,7 @@ const ProjectList = () => {
 
   useEffect(() => {
     fetchProjects();
-  });
+  },[]);
 
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
